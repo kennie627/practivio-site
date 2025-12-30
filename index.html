@@ -15,6 +15,8 @@
 <body>
   <div class="page">
     <header class="profile-header">
+      <!-- Removed the colored gradient line (brand-dot) -->
+
       <div class="topbar">
         <div class="topbar-right">
           <span class="chip">Free tools</span>
@@ -24,12 +26,10 @@
 
       <div class="profile-card">
         <div class="avatar-wrap">
-          <!-- Uses your real photo -->
           <img
             class="avatar-img"
             src="assets/profile.jpg"
             alt="Engineering Mentor profile photo"
-            loading="eager"
           />
           <span class="plus-badge" aria-hidden="true">+</span>
         </div>
@@ -83,8 +83,8 @@
         </p>
 
         <div class="start-buttons">
-          <button id="startResume" class="btn primary">Start Resume Review</button>
-          <button id="startLinkedIn" class="btn">Start LinkedIn Review</button>
+          <button id="startResume" class="btn primary" type="button">Start Resume Review</button>
+          <button id="startLinkedIn" class="btn" type="button">Start LinkedIn Review</button>
         </div>
 
         <p class="privacy">
@@ -111,7 +111,7 @@
             </p>
 
             <input type="file" id="resumePdf" accept="application/pdf" />
-            <button id="extractPdf" class="btn">Extract Text From PDF</button>
+            <button id="extractPdf" class="btn" type="button">Extract Text From PDF</button>
             <p id="pdfStatus" class="status"></p>
           </div>
 
@@ -121,7 +121,7 @@
           </div>
         </div>
 
-        <button id="runResumeReview" class="btn primary wide">
+        <button id="runResumeReview" class="btn primary wide" type="button">
           Generate Detailed Resume Review
         </button>
 
@@ -148,7 +148,7 @@
           placeholder="Target role (optional, but helps)"
         />
 
-        <button id="runLinkedInReview" class="btn primary wide">
+        <button id="runLinkedInReview" class="btn primary wide" type="button">
           Generate Detailed LinkedIn Review
         </button>
 
@@ -173,10 +173,6 @@
         <a id="bookMentorship" class="btn primary wide" target="_blank" rel="noreferrer">
           Book a mentorship call
         </a>
-
-        <p class="small muted" style="margin-top:10px;">
-          If the booking button doesn’t open yet, paste your Google appointment URL into app.js.
-        </p>
       </section>
 
       <footer class="footer">
@@ -185,6 +181,7 @@
     </main>
   </div>
 
+  <!-- IMPORTANT: app.js loads after DOM -->
   <script src="app.js"></script>
 </body>
 </html>

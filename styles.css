@@ -7,7 +7,6 @@
   --shadow:0 10px 30px rgba(0,0,0,.07);
   --radius:18px;
 
-  /* TikTok accents */
   --pink:#ff2bd6;
   --cyan:#2efcff;
 
@@ -16,11 +15,14 @@
 }
 
 *{ box-sizing:border-box; }
+html,body{ height:100%; }
+
 body{
   margin:0;
   background:var(--bg);
   color:var(--text);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial;
+  line-height:1.35;
 }
 
 .page{
@@ -29,20 +31,20 @@ body{
 }
 
 .profile-header{
-  padding:24px 16px;
+  padding:20px 16px 8px;
 }
 
 .topbar{
   display:flex;
-  justify-content:space-between;
+  justify-content:flex-end;
   align-items:center;
+  gap:10px;
 }
 
-.brand-dot{
-  width:46px;
-  height:10px;
-  border-radius:999px;
-  background:linear-gradient(90deg,var(--cyan),var(--pink));
+.topbar-right{
+  display:flex;
+  gap:8px;
+  align-items:center;
 }
 
 .chip{
@@ -52,62 +54,72 @@ body{
   border-radius:999px;
 }
 
-.profile-card{
-  text-align:center;
-  margin-top:16px;
+.chip.subtle{
+  color:var(--muted);
 }
 
-.avatar{
-  width:96px;
-  height:96px;
-  border-radius:50%;
-  background:#111;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
-  font-size:28px;
+.profile-card{
+  text-align:center;
+  margin-top:14px;
+}
+
+.avatar-wrap{
+  width:72px;
+  height:72px;
   margin:0 auto;
   position:relative;
 }
 
+.avatar-img{
+  width:72px;
+  height:72px;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid #fff;
+  box-shadow: 0 10px 24px rgba(0,0,0,.12);
+  display:block;
+}
+
 .plus-badge{
   position:absolute;
-  bottom:4px;
-  right:4px;
-  background:linear-gradient(90deg,var(--cyan),var(--pink));
-  color:#000;
-  width:26px;
-  height:26px;
+  bottom:-2px;
+  right:-2px;
+  width:20px;
+  height:20px;
   border-radius:50%;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-weight:700;
+  font-weight:800;
+  font-size:12px;
+  background:linear-gradient(90deg,var(--cyan),var(--pink));
+  color:#000;
+  border:2px solid #fff;
 }
 
 .profile-title h1{
-  margin:12px 0 2px;
+  margin:10px 0 2px;
+  font-size:26px;
+  letter-spacing:-0.4px;
 }
 
 .handle{
+  margin:0;
   color:var(--muted);
 }
 
 .stats{
   display:flex;
   justify-content:center;
-  gap:28px;
-  margin:14px 0;
+  gap:26px;
+  margin:12px 0;
 }
 
-.stat .num{
-  font-weight:700;
-}
+.stat .num{ font-weight:800; }
+.stat .lbl{ font-size:12px; color:var(--muted); }
 
 .bio{
-  margin:14px 0;
+  margin:12px 0;
   line-height:1.4;
 }
 
@@ -116,21 +128,24 @@ body{
   justify-content:center;
   gap:10px;
   flex-wrap:wrap;
+  margin-top:8px;
 }
 
 .pill{
   padding:10px 16px;
   border-radius:999px;
   border:1px solid var(--line);
+  background:#fff;
 }
 
 .pill.primary{
   background:var(--btn);
   color:var(--btnText);
+  border-color:var(--btn);
 }
 
 .main{
-  padding:0 16px 40px;
+  padding:0 16px 44px;
 }
 
 .card{
@@ -138,17 +153,36 @@ body{
   box-shadow:var(--shadow);
   border-radius:var(--radius);
   padding:20px;
-  margin-top:20px;
+  margin-top:18px;
 }
 
-.muted{
+.card-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.badge{
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--line);
   color:var(--muted);
 }
+
+.badge.alt{
+  border-color:#d1d5db;
+}
+
+.muted{ color:var(--muted); }
+.small{ font-size:12px; }
 
 .start-buttons{
   display:flex;
   gap:10px;
   margin-top:12px;
+  flex-wrap:wrap;
 }
 
 .btn{
@@ -157,11 +191,13 @@ body{
   border:1px solid var(--line);
   background:#fff;
   cursor:pointer;
+  font-weight:600;
 }
 
 .btn.primary{
   background:var(--btn);
   color:var(--btnText);
+  border-color:var(--btn);
 }
 
 .btn.wide{
@@ -177,6 +213,7 @@ textarea,
   border:1px solid var(--line);
   margin-top:10px;
   font-family:inherit;
+  font-size:14px;
 }
 
 .output{
@@ -190,9 +227,35 @@ textarea,
   margin:12px 0;
 }
 
+.split{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:14px;
+  margin-top:10px;
+}
+
+.panel{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+  background:#fff;
+}
+
+.status{
+  margin:10px 0 0;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.hidden{ display:none; }
+
 .footer{
   text-align:center;
   font-size:13px;
   color:var(--muted);
-  margin-top:40px;
+  margin-top:34px;
+}
+
+@media (max-width: 760px){
+  .split{ grid-template-columns: 1fr; }
 }
