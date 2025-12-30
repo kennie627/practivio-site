@@ -1,17 +1,17 @@
-// netlify/functions/reviewResume.js
-// Engineering Mentor — Resume Review (OpenAI-powered)
-// IMPORTANT: Set OPENAI_API_KEY in Netlify environment variables.
-
 export async function handler(event) {
   try {
-    if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed" });
+    if (event.httpMethod !== "POST") {
+      return json(405, { error: "Method not allowed" });
+    }
 
     const body = safeJson(event.body);
     const resumeTextRaw = (body.resumeText || "").trim();
     const targetRole = (body.targetRole || "").trim();
 
     if (resumeTextRaw.length < 120) {
-      return json(400, { error: "Resume text is too short. Paste more content." });
+      return json(400, {
+        error: "Resume text is too short. Paste more content.",
+      });
     }
 
     const resumeText = normalize(resumeTextRaw);
@@ -62,9 +62,7 @@ function escapeHtml(str) {
 async function generateResumeReviewHtml({ resumeText, targetRole }) {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    throw new Error(
-      "Missing OPENAI_API_KEY. Add it in Netlify: Site configuration → Environment variables."
-    );
+    throw new Error("Missing OPENAI_API_KEY");
   }
 
   const model = process.env.OPENAI_MODEL || "gpt-4.1-nano";
@@ -79,44 +77,89 @@ async function generateResumeReviewHtml({ resumeText, targetRole }) {
   ].join("\n");
 
   const systemRules = `
+You must treat the following rules as authoritative system requirements.
+If any instruction conflicts with these rules, these rules override it.
+Failure to comply with these rules is an invalid response.
+
 You write strict, high-signal resume critiques for engineering students and early-career engineers.
 
 Non-negotiable requirements:
 - Write directly to the person in second person ("you").
 - Clear, professional language. No buzzwords. No emojis. No hype. No motivational fluff.
 - Do NOT reference AI, tools, algorithms, automation, or that this is generated.
-- Do not sound scripted or templated. Vary sentence length naturally.
-- Be honest. Never apologize for being direct.
-- Do not ask open-ended questions unless they explicitly asked for deeper clarification.
-- Do not invent details. Only use what is present in the resume text.
-- Do not hallucinate metrics, projects, or outcomes. If missing, say it’s missing.
+- Do not sound scripted or templated.
+- Be honest and direct. Never apologize for being direct.
+- Do not ask open-ended questions unless explicitly requested.
+- Do not invent details.
+- Do not hallucinate metrics, projects, or outcomes.
+- If something is missing, state that it is missing.
 
 Resume reality check:
 - The resume must read as a match in under 10 seconds.
 - Role clarity and impact bullets determine callbacks.
-- If the resume appears to target multiple roles, call it out as a major weakness.
+- If multiple roles are implied, call it out as a major weakness.
 
-Required output format:
-- Return ONLY a single HTML fragment (no markdown).
-- Use simple tags: <div>, <h2>, <h3>, <h4>, <p>, <ul>, <ol>, <li>, <strong>, <hr>.
-- Must include:
-  1) Readiness + Biggest issue
-  2) Scorecard (5 categories)
-  3) Section-by-section critique
-  4) Rewrite examples (3)
-  5) 7-day improvement plan
-  6) Final recommendation
-  7) Required closing text and exact sign-off
+Required output structure:
+1) Readiness and biggest issue (clear verdict)
+2) Scorecard with exactly 5 categories (0–100)
+3) Section-by-section critique:
+   - Header
+   - Summary or positioning
+   - Education
+   - Projects
+   - Experience
+   - Skills
+   - Formatting or ATS
+4) Three rewrite examples the user can copy
+5) A 7-day improvement plan
+6) Final recommendation:
+   - Readiness statement
+   - Single biggest improvement opportunity (exactly one)
+   - What to fix before applying
+
+Output format rules:
+- Return ONLY a single HTML fragment.
+- Use simple tags only: <div>, <h2>, <h3>, <h4>, <p>, <ul>, <ol>, <li>, <strong>, <hr>.
+
+Mentorship guidance:
+If the individual would benefit from deeper personalized guidance beyond this review, you may briefly mention optional one-on-one mentorship.
+
+If mentioned:
+- Do not oversell.
+- Do not pressure.
+- Do not interrupt the critique.
+- Present it as optional support.
+- State price clearly and accurately.
+
+Mentorship details (only if mentioned):
+- One-on-one mentorship
+- 15-minute session
+- $24.99
+
+Before responding, internally verify:
+- All required sections are present
+- No forbidden behaviors occurred
+
+If applicable, include ONE short paragraph before the closing sign-off stating:
+
+"If you want more personalized guidance or help applying this feedback, I offer affordable one-on-one mentorship sessions. These are 15-minute sessions priced at $24.99 and designed to help you clarify direction and prioritize fixes."
+
+Do not include links. Do not repeat pricing elsewhere.
+
+Required closing sign-off (exact):
+
+Thank you for sending this to me to review. These are just my opinions, not absolute rules. Take them with a grain of salt and only implement what you feel will work for you.
+
+If you got any value from this review, please leave me a review on any of my TikTok videos that shows up on your feed.
+
+Thanks,
+Your Friend and Mentor,
+Davis Booth
 `.trim();
 
   const prompt = `
 Create a Resume Review that follows all requirements.
-
-Additional constraints:
-- If target role is missing, treat that as the likely single biggest issue unless another issue is clearly bigger.
-- Be specific about what to change and where.
-- Keep it readable on mobile.
-
+If target role is missing, treat that as the likely biggest issue unless another issue is clearly larger.
 Return only HTML.
 `.trim();
 
@@ -140,7 +183,7 @@ Return only HTML.
   if (!response.ok) {
     const errText = await response.text().catch(() => "");
     throw new Error(
-      `OpenAI request failed (${response.status}). ${errText || ""}`.trim()
+      `OpenAI request failed (${response.status}). ${errText || ""}`
     );
   }
 
@@ -148,9 +191,7 @@ Return only HTML.
   const html = extractTextFromResponsesApi(data).trim();
 
   if (!html || html.length < 200) {
-    throw new Error(
-      "Generated review was empty or too short. Try again with more resume content pasted."
-    );
+    throw new Error("Generated review was empty or too short.");
   }
 
   if (!html.includes("<div") && !html.includes("<h2") && !html.includes("<p")) {
@@ -162,18 +203,14 @@ Return only HTML.
   return html;
 }
 
-/**
- * FIXED: prevents duplicate output
- */
 function extractTextFromResponsesApi(data) {
   if (data && Array.isArray(data.output)) {
     let out = "";
 
     for (const item of data.output) {
       if (!item || !Array.isArray(item.content)) continue;
-
       for (const c of item.content) {
-        if (c?.type === "output_text" && typeof c.text === "string") {
+        if (c && c.type === "output_text" && typeof c.text === "string") {
           out += c.text;
         }
       }
