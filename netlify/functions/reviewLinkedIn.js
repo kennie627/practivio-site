@@ -1,3 +1,7 @@
+// netlify/functions/reviewLinkedIn.js
+// Engineering Mentor — LinkedIn Profile Review (OpenAI-powered)
+// IMPORTANT: Set OPENAI_API_KEY in Netlify environment variables.
+
 export async function handler(event) {
   try {
     if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed" });
@@ -11,8 +15,11 @@ export async function handler(event) {
     }
 
     const linkedinText = normalize(linkedinTextRaw);
-    const analysis = analyzeLinkedIn(linkedinText, targetRole);
-    const html = renderLinkedInReview(analysis);
+
+    const html = await generateLinkedInReviewHtml({
+      linkedinText,
+      targetRole,
+    });
 
     return json(200, { html });
   } catch (e) {
@@ -24,7 +31,15 @@ export async function handler(event) {
 function json(statusCode, obj) {
   return { statusCode, headers: { "Content-Type": "application/json" }, body: JSON.stringify(obj) };
 }
-function safeJson(raw) { try { return JSON.parse(raw || "{}"); } catch { return {}; } }
+
+function safeJson(raw) {
+  try {
+    return JSON.parse(raw || "{}");
+  } catch {
+    return {};
+  }
+}
+
 function normalize(t) {
   return t
     .replace(/\u0000/g, "")
@@ -32,10 +47,7 @@ function normalize(t) {
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 }
-function hasAny(text, needles) {
-  const t = text.toLowerCase();
-  return needles.some(n => t.includes(n.toLowerCase()));
-}
+
 function escapeHtml(str) {
   return String(str || "")
     .replaceAll("&", "&amp;")
@@ -43,198 +55,144 @@ function escapeHtml(str) {
     .replaceAll(">", "&gt;");
 }
 
-function analyzeLinkedIn(text, targetRole) {
-  const lower = text.toLowerCase();
+async function generateLinkedInReviewHtml({ linkedinText, targetRole }) {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    throw new Error("Missing OPENAI_API_KEY. Add it in Netlify: Site configuration → Environment variables.");
+  }
 
-  const hasHeadlineSignal = /engineer|engineering|test|systems|electrical|mechanical|manufacturing|software/i.test(text);
-  const hasAbout = hasAny(text, ["about", "summary"]);
-  const hasExperience = hasAny(text, ["experience", "employment", "work"]);
-  const hasProjects = hasAny(text, ["projects", "project"]);
-  const hasSkills = hasAny(text, ["skills", "endorsements"]);
-  const hasEducation = hasAny(text, ["education", "university", "college", "bachelor", "master"]);
-  const hasCerts = hasAny(text, ["certification", "certified", "cert", "ipc", "six sigma"]);
+  const model = process.env.OPENAI_MODEL || "gpt-4.1-nano"; // cheap + strong enough for structured critiques
 
-  const hasMetrics = /(\b\d{1,3}%\b|\b\d{3,}\b|\b\$?\d+(,\d{3})*\b)/.test(text);
-  const vagueTraits = /(passionate|hard[- ]working|motivated|driven|eager|aspiring)/i.test(text);
+  // Keep user content safely fenced so the model treats it as input, not instructions.
+  const userPayload = [
+    `TARGET ROLE (optional): ${targetRole || "(not provided)"}`,
+    "",
+    "LINKEDIN CONTENT (paste / exported text):",
+    "```",
+    linkedinText,
+    "```",
+  ].join("\n");
 
-  const roleSignals = [
-    { name: "Electrical", keys: ["electrical", "pcb", "pcba", "schematic", "power electronics", "harness"] },
-    { name: "Mechanical", keys: ["mechanical", "solidworks", "cad", "fea", "gd&t"] },
-    { name: "Systems", keys: ["systems", "requirements", "integration", "verification", "validation", "v&v"] },
-    { name: "Test", keys: ["test", "ate", "labview", "functional test", "ict", "debug"] },
-    { name: "Manufacturing", keys: ["manufacturing", "smt", "yield", "lean", "process", "quality"] },
-    { name: "Software", keys: ["software", "python", "c++", "javascript", "git"] }
-  ];
+  const systemRules = `
+You write LinkedIn profile critiques for engineering students and early-career engineers.
 
-  const detectedRoles = roleSignals
-    .map(r => ({ role: r.name, hits: r.keys.filter(k => lower.includes(k)).length }))
-    .filter(r => r.hits > 0)
-    .sort((a,b) => b.hits - a.hits);
+Non-negotiable requirements:
+- Write directly to the person in second person ("you").
+- Clear, professional language. No buzzwords. No emojis. No hype. No motivational fluff.
+- Do NOT reference AI, tools, algorithms, automation, or that this is generated.
+- Do not sound scripted or templated. Vary sentence length naturally.
+- Be honest even if uncomfortable. Never apologize for being honest.
+- Do not ask open-ended questions unless they explicitly requested deeper mentoring clarification.
+- Do not give multiple branching options. Pick the best path and explain it.
+- Do not restate their text verbatim. Summarize what matters.
 
-  const positioningClear =
-    !!targetRole ||
-    (detectedRoles.length > 0 && detectedRoles[0].hits >= 2);
+Core LinkedIn reality check:
+- Their profile exists to answer: "Is this person worth messaging, referring, or interviewing?"
+- Positioning must be clear within five seconds.
+- If the profile tries to appeal to multiple unrelated roles, call it out as a major weakness.
+- Headline is the highest priority. Must communicate direction, not potential. Avoid vague traits like passionate/motivated/hard-working.
 
-  const biggestOpportunity = !positioningClear
-    ? "Your positioning is not clear within five seconds. A recruiter cannot tell what role you are targeting."
-    : !hasMetrics
-      ? "Your experience reads like responsibilities. You need proof of decision-making, constraints, and results."
-      : !hasProjects
-        ? "You need a Projects section that proves engineering thinking and tools, especially if you are early-career."
-        : "Tighten your headline and About so your direction is obvious and outreach is easy.";
+Required coverage (brief but real):
+- Positioning (clarity within 5 seconds)
+- Headline
+- About
+- Experience (signal not prestige; decisions/constraints/results; duties alone not acceptable)
+- Projects (problem, constraints, tools, contribution, decisions; few strong beats many weak)
+- Skills (no buzzword stacking; align with proof)
+- Education (accurate, no exaggeration)
+- Activity (not daily; but flag total inactivity if job searching)
+- Network strategy (relevance over size; role/company/geography targeting; flag mass connecting)
+- Messaging readiness (reduce friction; make outreach easy)
+- Gaps/weaknesses (acknowledge if obvious; reframe honestly; offset with projects/learning)
 
-  const score = {
-    positioning: clamp(30 + (positioningClear ? 35 : 0) + (hasHeadlineSignal ? 15 : 0) - (vagueTraits ? 10 : 0), 0, 100),
-    experienceSignal: clamp(25 + (hasExperience ? 25 : 0) + (hasMetrics ? 25 : 0), 0, 100),
-    projects: clamp(25 + (hasProjects ? 40 : 0), 0, 100),
-    skillsCredibility: clamp(35 + (hasSkills ? 35 : 0) - (vagueTraits ? 5 : 0), 0, 100),
-    completeness: clamp(20 + (hasEducation ? 20 : 0) + (hasAbout ? 15 : 0) + (hasCerts ? 10 : 0) + (hasExperience ? 20 : 0), 0, 100)
-  };
+Output format requirements:
+- Return ONLY a single HTML fragment (no markdown).
+- Use simple tags: <div>, <h2>, <h3>, <p>, <ul>, <li>, <strong>, <hr>.
+- Include a compact scorecard with 5 categories (0–100): Overall, Positioning, Experience signal, Projects, Skills credibility.
+- Include these required ending elements:
+  1) Clear prioritized next steps (numbered list)
+  2) Identify the single biggest improvement opportunity (exactly one)
+  3) What to fix before actively applying or networking
+  4) Whether the profile is internship or entry-level job ready
+  5) How this profile fits into a broader job search strategy
+  6) Required closing text and exact sign-off:
 
-  const overall = Math.round((score.positioning + score.experienceSignal + score.projects + score.skillsCredibility + score.completeness) / 5);
+Thanks,
+Your Friend and Mentor,
+Davis Booth
+`.trim();
 
-  const readiness =
-    overall >= 80 ? "This is close to entry-level job ready for most pipelines. Still tailor headline + top bullets per role."
-    : overall >= 65 ? "Not job-ready yet. You are close, but your profile is not reducing risk for a recruiter."
-    : "Not ready yet. You likely get viewed, but you are not converting to messages or interviews.";
+  const prompt = `
+Create a LinkedIn Profile Review that follows all requirements.
+If target role is missing, you must diagnose that as the likely single biggest issue unless another issue is clearly bigger.
 
-  return {
-    targetRole,
-    detectedRoles,
-    flags: { hasAbout, hasExperience, hasProjects, hasSkills, hasEducation, hasCerts, hasMetrics, vagueTraits, hasHeadlineSignal },
-    positioningClear,
-    score,
-    overall,
-    biggestOpportunity,
-    readiness
-  };
+Make the review readable on a phone:
+- short sections
+- tight bullets
+- direct language
+
+Return only HTML.
+`.trim();
+
+  const response = await fetch("https://api.openai.com/v1/responses", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model,
+      input: [
+        { role: "system", content: systemRules },
+        { role: "user", content: prompt + "\n\n" + userPayload },
+      ],
+      // Keep it controlled and cheap
+      temperature: 0.4,
+      max_output_tokens: 1800,
+    }),
+  });
+
+  if (!response.ok) {
+    const errText = await response.text().catch(() => "");
+    throw new Error(`OpenAI request failed (${response.status}). ${errText || ""}`.trim());
+  }
+
+  const data = await response.json();
+
+  // Responses API commonly returns `output` array; safest is to join any text parts we find.
+  const html = extractTextFromResponsesApi(data).trim();
+
+  if (!html || html.length < 200) {
+    throw new Error("Generated review was empty or too short. Try again with more LinkedIn content pasted.");
+  }
+
+  // Basic guard: ensure it returned HTML-ish
+  if (!html.includes("<div") && !html.includes("<h2") && !html.includes("<p")) {
+    // If model returned plain text, wrap it minimally.
+    return `<div class="review"><h2>LinkedIn Profile Review</h2><p>${escapeHtml(html)}</p></div>`;
+  }
+
+  return html;
 }
 
-function renderLinkedInReview(a) {
-  const detected = a.detectedRoles.length
-    ? a.detectedRoles.slice(0, 3).map(r => `${r.role}`).join(", ")
-    : "Not obvious from what you provided";
+function extractTextFromResponsesApi(data) {
+  // Handles a few possible shapes from /v1/responses
+  // Preferred: data.output[*].content[*].text
+  if (data && Array.isArray(data.output)) {
+    let out = "";
+    for (const item of data.output) {
+      if (!item || !Array.isArray(item.content)) continue;
+      for (const c of item.content) {
+        if (c && typeof c.text === "string") out += c.text;
+        if (c && c.type === "output_text" && typeof c.text === "string") out += c.text;
+      }
+    }
+    if (out.trim()) return out;
+  }
 
-  const positioningFix = a.positioningClear
-    ? `Your direction is somewhat clear, but it still needs to be explicit so a recruiter doesn’t have to interpret it.`
-    : `Right now your profile does not answer the hiring question fast enough: “Is this person worth messaging or referring?”`;
+  // Fallbacks
+  if (typeof data.output_text === "string") return data.output_text;
+  if (typeof data.text === "string") return data.text;
 
-  const headlineGuidance = `
-    <h3>Headline (highest priority)</h3>
-    <ul>
-      <li>Your headline must communicate direction, not potential.</li>
-      <li>A headline that only says “Engineering Student” or “Aspiring Engineer” is not enough.</li>
-      <li>Use role language that matches real postings. Avoid vague traits.</li>
-    </ul>
-    <p><strong>Simple headline pattern:</strong> Target role + domain + proof tool(s). Example: “Test Engineer | ATE + LabVIEW | Aerospace systems”.</p>
-  `;
-
-  const aboutGuidance = `
-    <h3>About section</h3>
-    <ul>
-      <li>Explain what you are working toward and how you think.</li>
-      <li>State what problems interest you and what skills you are building.</li>
-      <li>Remove cover-letter language and personal branding fluff.</li>
-    </ul>
-  `;
-
-  const experienceGuidance = `
-    <h3>Experience section</h3>
-    <ul>
-      <li>Duties alone are not acceptable. You need decisions, constraints, and results.</li>
-      <li>Use impact bullets with tools and outcomes. Quantify when possible.</li>
-      <li>Non-engineering roles must be reframed to show responsibility, reliability, and process thinking.</li>
-    </ul>
-  `;
-
-  const projectsGuidance = `
-    <h3>Projects (LinkedIn-specific)</h3>
-    <ul>
-      <li>Projects are critical for students and early-career engineers.</li>
-      <li>Each project must state: problem, constraints, tools, your contribution, and decisions you made.</li>
-      <li>Fewer strong projects beats many shallow ones.</li>
-    </ul>
-  `;
-
-  const skillsGuidance = `
-    <h3>Skills</h3>
-    <ul>
-      <li>Skills must match your projects and experience. Buzzword stacking hurts credibility.</li>
-      <li>Group skills in categories that make sense to an engineering manager.</li>
-      <li>Only list what you can defend in an interview.</li>
-    </ul>
-  `;
-
-  const networkGuidance = `
-    <h3>Network and messaging readiness</h3>
-    <ul>
-      <li>Your profile should make it easy to know what to message you about.</li>
-      <li>Ambiguity creates hesitation. Your positioning should invite relevant conversations.</li>
-      <li>Connections should include engineers and hiring-relevant roles, not just students.</li>
-    </ul>
-  `;
-
-  const activityGuidance = `
-    <h3>Activity</h3>
-    <ul>
-      <li>You do not need to post daily.</li>
-      <li>If you are actively job searching, complete inactivity should be addressed.</li>
-      <li>Thoughtful comments on technical posts help more than random likes.</li>
-    </ul>
-  `;
-
-  const missing = [
-    a.flags.hasAbout ? null : "Add or rewrite your About section so it explains your direction and how you think.",
-    a.flags.hasExperience ? null : "Your Experience section needs stronger bullets that show decisions and results.",
-    a.flags.hasProjects ? null : "Add a Projects section with 2–4 strong projects that support your target role.",
-    a.flags.hasSkills ? null : "Clean up your Skills section so it matches your experience and projects.",
-    a.flags.hasEducation ? null : "Ensure Education is clear and accurate with the correct degree type and dates."
-  ].filter(Boolean);
-
-  const closing = `
-    <h3>Final recommendation</h3>
-    <p><strong>Readiness:</strong> ${escapeHtml(a.readiness)}</p>
-    <p><strong>Single biggest improvement opportunity:</strong> ${escapeHtml(a.biggestOpportunity)}</p>
-    <p><strong>What to fix before applying or networking hard:</strong> make the headline + About read like a clear match, then rebuild experience/project bullets to show decisions, constraints, and results.</p>
-
-    <hr />
-    <p>Thank you for sending your profile to me. These are my opinions, not absolute rules. Implement only what feels right for you.</p>
-    <p>If you found value, please leave me a review on any of my TikTok videos that appears on your feed.</p>
-    <p><strong>Thanks,<br />Your Friend and Mentor,<br />Davis Booth</strong></p>
-  `;
-
-  return `
-    <div class="review">
-      <h2>LinkedIn Profile Review</h2>
-
-      <h3>Recruiter and hiring manager reality check</h3>
-      <p>Your profile exists to answer one question: “Is this person worth messaging, referring, or interviewing?”</p>
-      <p><strong>What your profile signals right now:</strong> ${escapeHtml(detected)}</p>
-      <p>${positioningFix}</p>
-
-      <h3>Scorecard</h3>
-      <div class="scoregrid">
-        <div class="score"><div class="n">${a.overall}</div><div class="l">Overall</div></div>
-        <div class="score"><div class="n">${a.score.positioning}</div><div class="l">Positioning</div></div>
-        <div class="score"><div class="n">${a.score.experienceSignal}</div><div class="l">Experience signal</div></div>
-        <div class="score"><div class="n">${a.score.projects}</div><div class="l">Projects</div></div>
-        <div class="score"><div class="n">${a.score.skillsCredibility}</div><div class="l">Skills credibility</div></div>
-      </div>
-
-      ${a.flags.vagueTraits ? `<div class="notice"><strong>Callout:</strong> vague traits (motivated, passionate, aspiring) reduce clarity. Replace them with role language, tools, and proof.</div>` : ""}
-
-      ${missing.length ? `<h3>Missing or weak sections</h3><ul>${missing.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
-
-      ${headlineGuidance}
-      ${aboutGuidance}
-      ${experienceGuidance}
-      ${projectsGuidance}
-      ${skillsGuidance}
-      ${networkGuidance}
-      ${activityGuidance}
-      ${closing}
-    </div>
-  `;
+  return "";
 }
-
-function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
