@@ -4,31 +4,18 @@
   <meta charset="UTF-8" />
   <title>Engineering Mentor — Free Resume & LinkedIn Reviews</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Free, instant resume and LinkedIn reviews from a real engineering hiring perspective." />
+  <meta name="description" content="Free resume and LinkedIn profile reviews for engineers and engineering students." />
 
   <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 
 <body>
   <div class="page">
+
     <header class="profile-header">
       <div class="profile-card">
-        <div class="avatar-wrap">
-          <img class="avatar-img" src="assets/profile.jpg" alt="Engineering Mentor profile photo" />
-          <span class="plus-badge" aria-hidden="true">+</span>
-        </div>
-
-        <div class="profile-title">
-          <h1>engineeringmentor</h1>
-          <p class="handle">@engineeringmentor</p>
-        </div>
-
-        <div class="stats">
-          <div class="stat"><div class="num">Free</div><div class="lbl">Reviews</div></div>
-          <div class="stat"><div class="num">Fast</div><div class="lbl">Fixes</div></div>
-          <div class="stat"><div class="num">Real</div><div class="lbl">Hiring signal</div></div>
-        </div>
+        <h1>engineeringmentor</h1>
+        <p class="handle">@engineeringmentor</p>
 
         <p class="bio">
           Former NASA and Rocket Engineer<br />
@@ -38,118 +25,90 @@
     </header>
 
     <main class="main">
-      <section class="card intro">
+
+      <section class="card">
         <h2>Free Resume + LinkedIn Profile Review</h2>
         <p class="muted">
-          To keep this free and sustainable, we ask for two quick steps first.
-          The review is detailed, honest, and written from a real hiring perspective.
-        </p>
-
-        <button id="startFunnel" class="btn primary wide" type="button">
-          Get Started
-        </button>
-
-        <p class="privacy">
-          Privacy: PDFs are processed in your browser. Only extracted text is sent. No files stored.
+          Follow the steps below to get a free, honest review written from a real hiring perspective.
         </p>
       </section>
 
-      <section id="step1" class="card tool-section hidden">
-        <h2>Step 1 — Follow on TikTok</h2>
+      <!-- STEP 1 -->
+      <section class="card">
+        <h3>Step 1 — Follow on TikTok</h3>
         <p class="muted">This helps keep the reviews free.</p>
 
-        <!-- NO POPUPS: normal navigation -->
-        <a class="btn wide" href="https://www.tiktok.com/@engineeringmentor" rel="noreferrer">
-          Open TikTok and Follow @engineeringmentor
+        <a
+          href="https://www.tiktok.com/@engineeringmentor"
+          target="_blank"
+          rel="noreferrer"
+        >
+          👉 Follow @engineeringmentor on TikTok
         </a>
-
-        <label class="checkbox">
-          <input type="checkbox" id="confirmTikTok" />
-          I’ve followed on TikTok
-        </label>
-
-        <button id="toStep2" class="btn primary wide" type="button" disabled>
-          Continue
-        </button>
       </section>
 
-      <section id="step2" class="card tool-section hidden">
-        <h2>Step 2 — Follow on LinkedIn</h2>
+      <!-- STEP 2 -->
+      <section class="card">
+        <h3>Step 2 — Follow on LinkedIn</h3>
         <p class="muted">This helps us reach more engineers.</p>
 
-        <!-- NO POPUPS: normal navigation -->
-        <a class="btn wide" href="https://www.linkedin.com/in/davis-booth-81537391" rel="noreferrer">
-          Open LinkedIn and Follow
+        <a
+          href="https://www.linkedin.com/in/davis-booth-81537391"
+          target="_blank"
+          rel="noreferrer"
+        >
+          👉 Follow on LinkedIn
         </a>
-
-        <label class="checkbox">
-          <input type="checkbox" id="confirmLinkedIn" />
-          I’ve followed on LinkedIn
-        </label>
-
-        <button id="toStep3" class="btn primary wide" type="button" disabled>
-          Continue
-        </button>
       </section>
 
-      <section id="step3" class="card tool-section hidden">
-        <h2>Step 3 — Upload Your Files</h2>
+      <!-- STEP 3 -->
+      <section class="card">
+        <h3>Step 3 — Submit Your Files</h3>
         <p class="muted">
-          Upload both for a comprehensive report.
-          Missing one? The review will still run.
+          Upload both for a comprehensive review.  
+          If you only have one, the review will still run.
         </p>
 
-        <div class="split">
-          <div class="panel">
-            <h3>Resume PDF</h3>
-            <input type="file" id="resumePdf" accept="application/pdf" />
-          </div>
-
-          <div class="panel">
-            <h3>LinkedIn Profile PDF</h3>
-            <input type="file" id="linkedinPdf" accept="application/pdf" />
-          </div>
-        </div>
-
-        <input
-          type="text"
-          id="targetRole"
-          class="input"
-          placeholder="Target role (optional but strongly recommended)"
-        />
-
-        <button id="runCombinedReview" class="btn primary wide" type="button">
-          Generate Comprehensive Review
-        </button>
-
-        <div id="combinedOutput" class="output"></div>
+        <form>
+          <label>
+            Resume PDF<br />
+            <input type="file" accept="application/pdf" />
+          </label>
+          <br /><br />
+          <label>
+            LinkedIn Profile PDF<br />
+            <input type="file" accept="application/pdf" />
+          </label>
+        </form>
       </section>
 
-      <section id="mentorship" class="card mentor-section hidden">
-        <h2>Want Help Applying This?</h2>
-
+      <!-- FINAL CTA -->
+      <section class="card">
+        <h3>Optional — One-on-One Mentorship</h3>
         <p class="muted">
-          If you want help prioritizing fixes or deciding next steps,
+          If you want help applying the feedback or deciding next steps,
           I offer affordable one-on-one mentorship.
         </p>
 
-        <div class="notice">
-          15-minute focused session — $24.99<br />
+        <p>
+          <strong>15-minute session — $24.99</strong><br />
           No upsells. No pressure.
-        </div>
+        </p>
 
-        <!-- NO POPUPS: normal navigation -->
-        <a class="btn primary wide" href="https://buy.stripe.com/7sY8wR3Vv6At0vjc5q6g807" rel="noreferrer">
-          Book 15-Minute Mentorship
+        <a
+          href="https://buy.stripe.com/7sY8wR3Vv6At0vjc5q6g807"
+          target="_blank"
+          rel="noreferrer"
+        >
+          👉 Book One-on-One Mentorship
         </a>
       </section>
 
       <footer class="footer">
-        Engineering Mentor • Built for engineers • Free reviews • Real hiring signal
+        Engineering Mentor • Free reviews • Real hiring signal
       </footer>
+
     </main>
   </div>
-
-  <script src="app.js"></script>
 </body>
 </html>
