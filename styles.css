@@ -263,3 +263,25 @@ textarea,
   .split{ grid-template-columns:1fr; }
   .scoregrid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
 }
+a,
+button {
+  position: relative;
+  z-index: 50;
+}
+
+.profile-card,
+.profile-header,
+.avatar-wrap {
+  pointer-events: none;
+}
+
+.profile-card a,
+.profile-card button,
+.main a,
+.main button {
+  pointer-events: auto;
+}
+
+.plus-badge {
+  pointer-events: none;
+}
