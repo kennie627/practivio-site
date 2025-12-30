@@ -29,7 +29,11 @@ export async function handler(event) {
 }
 
 function json(statusCode, obj) {
-  return { statusCode, headers: { "Content-Type": "application/json" }, body: JSON.stringify(obj) };
+  return {
+    statusCode,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(obj),
+  };
 }
 
 function safeJson(raw) {
@@ -41,7 +45,7 @@ function safeJson(raw) {
 }
 
 function normalize(t) {
-  return t
+  return String(t || "")
     .replace(/\u0000/g, "")
     .replace(/[ \t]+\n/g, "\n")
     .replace(/\n{3,}/g, "\n\n")
@@ -58,12 +62,13 @@ function escapeHtml(str) {
 async function generateResumeReviewHtml({ resumeText, targetRole }) {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    throw new Error("Missing OPENAI_API_KEY. Add it in Netlify: Site configuration → Environment variables.");
+    throw new Error(
+      "Missing OPENAI_API_KEY. Add it in Netlify: Site configuration → Environment variables."
+    );
   }
 
-  const model = process.env.OPENAI_MODEL || "gpt-4.1-nano"; // cheaper default
+  const model = process.env.OPENAI_MODEL || "gpt-4.1-nano";
 
-  // Fence the resume so the model treats it as input, not instructions.
   const userPayload = [
     `TARGET ROLE (optional): ${targetRole || "(not provided)"}`,
     "",
@@ -95,24 +100,13 @@ Required output format:
 - Return ONLY a single HTML fragment (no markdown).
 - Use simple tags: <div>, <h2>, <h3>, <h4>, <p>, <ul>, <ol>, <li>, <strong>, <hr>.
 - Must include:
-  1) Readiness + Biggest issue (verdict + single biggest issue)
-  2) Scorecard with 5 categories (0–100): Overall, Role clarity, Projects strength, Impact bullets, ATS readability
-  3) Section-by-section critique: Header, Summary/Positioning, Education, Projects, Experience, Skills, Formatting/ATS
-  4) Rewrite examples (3) the user can copy (impact bullet, project bullet, skills credibility)
-  5) A 7-day improvement plan (Day 1–Day 7)
-  6) Final recommendation with:
-     - Readiness statement
-     - Single biggest improvement opportunity (exactly one)
-     - What to fix before applying
-  7) Required closing text and exact sign-off:
-
-Thank you for sending this to me to review. These are just my opinions, not absolute rules. Take them with a grain of salt and only implement what you feel will work for you.
-
-If you got any value from this review, please leave me a review on any of my TikTok videos that shows up on your feed.
-
-Thanks,
-Your Friend and Mentor,
-Davis Booth
+  1) Readiness + Biggest issue
+  2) Scorecard (5 categories)
+  3) Section-by-section critique
+  4) Rewrite examples (3)
+  5) 7-day improvement plan
+  6) Final recommendation
+  7) Required closing text and exact sign-off
 `.trim();
 
   const prompt = `
@@ -120,8 +114,8 @@ Create a Resume Review that follows all requirements.
 
 Additional constraints:
 - If target role is missing, treat that as the likely single biggest issue unless another issue is clearly bigger.
-- Be specific about what to change and where (top third, bullets, section order).
-- Keep it readable on mobile: short paragraphs, tight bullets.
+- Be specific about what to change and where.
+- Keep it readable on mobile.
 
 Return only HTML.
 `.trim();
@@ -145,39 +139,49 @@ Return only HTML.
 
   if (!response.ok) {
     const errText = await response.text().catch(() => "");
-    throw new Error(`OpenAI request failed (${response.status}). ${errText || ""}`.trim());
+    throw new Error(
+      `OpenAI request failed (${response.status}). ${errText || ""}`.trim()
+    );
   }
 
   const data = await response.json();
   const html = extractTextFromResponsesApi(data).trim();
 
   if (!html || html.length < 200) {
-    throw new Error("Generated review was empty or too short. Try again with more resume content pasted.");
+    throw new Error(
+      "Generated review was empty or too short. Try again with more resume content pasted."
+    );
   }
 
-  // Basic guard: if it returned plain text, wrap it.
   if (!html.includes("<div") && !html.includes("<h2") && !html.includes("<p")) {
-    return `<div class="review"><h2>Resume Review</h2><p>${escapeHtml(html)}</p></div>`;
+    return `<div class="review"><h2>Resume Review</h2><p>${escapeHtml(
+      html
+    )}</p></div>`;
   }
 
   return html;
 }
 
+/**
+ * FIXED: prevents duplicate output
+ */
 function extractTextFromResponsesApi(data) {
-  // Preferred: data.output[*].content[*].text
   if (data && Array.isArray(data.output)) {
     let out = "";
+
     for (const item of data.output) {
       if (!item || !Array.isArray(item.content)) continue;
+
       for (const c of item.content) {
-        if (c && typeof c.text === "string") out += c.text;
-        if (c && c.type === "output_text" && typeof c.text === "string") out += c.text;
+        if (c?.type === "output_text" && typeof c.text === "string") {
+          out += c.text;
+        }
       }
     }
+
     if (out.trim()) return out;
   }
 
-  // Fallbacks
   if (typeof data.output_text === "string") return data.output_text;
   if (typeof data.text === "string") return data.text;
 
