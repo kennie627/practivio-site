@@ -14,6 +14,7 @@
 <body>
   <div class="page">
 
+    <!-- HEADER -->
     <header class="profile-header">
       <div class="profile-card">
         <div class="avatar-wrap">
@@ -41,6 +42,7 @@
 
     <main class="main">
 
+      <!-- INTRO -->
       <section class="card intro">
         <h2>Free Resume + LinkedIn Profile Review</h2>
         <p class="muted">
@@ -57,18 +59,18 @@
         </p>
       </section>
 
+      <!-- STEP 1 -->
       <section id="step1" class="card tool-section hidden">
         <h2>Step 1 — Follow on TikTok</h2>
         <p class="muted">This helps keep the reviews free.</p>
 
-        <a
+        <button
           class="btn"
-          href="https://www.tiktok.com/@engineeringmentor"
-          target="_blank"
-          rel="noreferrer"
+          type="button"
+          onclick="window.open('https://www.tiktok.com/@engineeringmentor','_blank')"
         >
           Follow @engineeringmentor on TikTok
-        </a>
+        </button>
 
         <label class="checkbox">
           <input type="checkbox" id="confirmTikTok" />
@@ -80,18 +82,18 @@
         </button>
       </section>
 
+      <!-- STEP 2 -->
       <section id="step2" class="card tool-section hidden">
         <h2>Step 2 — Follow on LinkedIn</h2>
         <p class="muted">This helps us reach more engineers.</p>
 
-        <a
+        <button
           class="btn"
-          href="https://www.linkedin.com/in/davis-booth-81537391"
-          target="_blank"
-          rel="noreferrer"
+          type="button"
+          onclick="window.open('https://www.linkedin.com/in/davis-booth-81537391','_blank')"
         >
           Follow on LinkedIn
-        </a>
+        </button>
 
         <label class="checkbox">
           <input type="checkbox" id="confirmLinkedIn" />
@@ -103,6 +105,7 @@
         </button>
       </section>
 
+      <!-- STEP 3 -->
       <section id="step3" class="card tool-section hidden">
         <h2>Step 3 — Upload Your Files</h2>
         <p class="muted">
@@ -136,6 +139,7 @@
         <div id="combinedOutput" class="output"></div>
       </section>
 
+      <!-- STEP 4 -->
       <section id="mentorship" class="card mentor-section hidden">
         <h2>Want Help Applying This?</h2>
 
@@ -149,14 +153,13 @@
           No upsells. No pressure.
         </div>
 
-        <a
+        <button
           class="btn primary wide"
-          href="https://buy.stripe.com/7sY8wR3Vv6At0vjc5q6g807"
-          target="_blank"
-          rel="noreferrer"
+          type="button"
+          onclick="window.open('https://buy.stripe.com/7sY8wR3Vv6At0vjc5q6g807','_blank')"
         >
           Book 15-Minute Mentorship
-        </a>
+        </button>
       </section>
 
       <footer class="footer">
