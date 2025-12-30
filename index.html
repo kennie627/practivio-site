@@ -8,22 +8,13 @@
 
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- PDF.js (core) -->
+  <!-- PDF.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 
 <body>
   <div class="page">
     <header class="profile-header">
-      <!-- Removed the colored gradient line (brand-dot) -->
-
-      <div class="topbar">
-        <div class="topbar-right">
-          <span class="chip">Free tools</span>
-          <span class="chip subtle">No upsells</span>
-        </div>
-      </div>
-
       <div class="profile-card">
         <div class="avatar-wrap">
           <img
@@ -41,16 +32,16 @@
 
         <div class="stats">
           <div class="stat">
-            <div class="num">8.2K+</div>
-            <div class="lbl">Followers</div>
-          </div>
-          <div class="stat">
-            <div class="num">600K+</div>
-            <div class="lbl">Likes</div>
-          </div>
-          <div class="stat">
             <div class="num">Free</div>
             <div class="lbl">Reviews</div>
+          </div>
+          <div class="stat">
+            <div class="num">Fast</div>
+            <div class="lbl">Fixes</div>
+          </div>
+          <div class="stat">
+            <div class="num">Real</div>
+            <div class="lbl">Hiring signal</div>
           </div>
         </div>
 
@@ -79,7 +70,7 @@
         <h2>Free Resume Reviews + LinkedIn Profile Reviews</h2>
         <p class="muted">
           Upload a PDF or paste text. Get a detailed review instantly — written from a hiring-manager reality check,
-          with clear fixes, rewrite examples, and a 7-day plan.
+          with clear fixes, rewrite examples, and a clear next-steps plan.
         </p>
 
         <div class="start-buttons">
@@ -88,7 +79,7 @@
         </div>
 
         <p class="privacy">
-          Privacy: your PDF is processed in your browser and only extracted text is sent for analysis. No files stored.
+          Privacy: your PDF is processed in your browser and only extracted text is sent for review. No files stored.
         </p>
       </section>
 
@@ -105,9 +96,9 @@
 
         <div class="split">
           <div class="panel">
-            <h3>Option A: Upload PDF</h3>
+            <h3>Option A: Upload Resume PDF</h3>
             <p class="muted small">
-              We extract text in your browser (PDF.js). If extraction looks messy, use paste text instead.
+              We extract text in your browser. If extraction looks messy, use paste text instead.
             </p>
 
             <input type="file" id="resumePdf" accept="application/pdf" />
@@ -120,6 +111,13 @@
             <textarea id="resumeText" rows="12" placeholder="Paste your resume text here..."></textarea>
           </div>
         </div>
+
+        <input
+          type="text"
+          id="resumeTargetRole"
+          class="input"
+          placeholder="Target role (optional, but helps) e.g., Entry-level Mechanical Engineer, Test Engineer, Aerospace Systems Engineer"
+        />
 
         <button id="runResumeReview" class="btn primary wide" type="button">
           Generate Detailed Resume Review
@@ -136,16 +134,36 @@
         </div>
 
         <p class="muted">
-          Paste your LinkedIn profile text (headline, about, experience, projects, skills). Instant detailed review.
+          Best path: export your LinkedIn profile as a PDF, upload it here, then generate your review.
         </p>
 
-        <textarea id="linkedinText" rows="12" placeholder="Paste your LinkedIn profile text here..."></textarea>
+        <div class="notice">
+          <strong>How to download your LinkedIn PDF (Desktop):</strong><br />
+          Open your profile → click <strong>More</strong> → <strong>Save to PDF</strong> → then upload the PDF here.
+          <div class="small muted" style="margin-top:8px;">
+            If you don’t see “Save to PDF” on mobile, use a computer or LinkedIn desktop site.
+          </div>
+        </div>
+
+        <div class="split">
+          <div class="panel">
+            <h3>Option A: Upload LinkedIn PDF</h3>
+            <input type="file" id="linkedinPdf" accept="application/pdf" />
+            <button id="extractLinkedinPdf" class="btn" type="button">Extract Text From LinkedIn PDF</button>
+            <p id="linkedinPdfStatus" class="status"></p>
+          </div>
+
+          <div class="panel">
+            <h3>Option B: Paste LinkedIn profile text</h3>
+            <textarea id="linkedinText" rows="12" placeholder="Paste your LinkedIn profile text here..."></textarea>
+          </div>
+        </div>
 
         <input
           type="text"
           id="linkedinTargetRole"
           class="input"
-          placeholder="Target role (optional, but helps)"
+          placeholder="Target role (optional, but helps) e.g., Electrical Engineer, Manufacturing Engineer, Systems Engineer"
         />
 
         <button id="runLinkedInReview" class="btn primary wide" type="button">
@@ -163,7 +181,7 @@
         </div>
 
         <p class="muted">
-          Want help implementing the fixes? Book a one-on-one session with Davis — engineer, hiring-side reviewer, and mentor.
+          Want help implementing the fixes? Book a one-on-one session with Davis.
         </p>
 
         <div class="notice">
@@ -181,7 +199,6 @@
     </main>
   </div>
 
-  <!-- IMPORTANT: app.js loads after DOM -->
   <script src="app.js"></script>
 </body>
 </html>
