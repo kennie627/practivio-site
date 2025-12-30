@@ -1,317 +1,189 @@
-/* global pdfjsLib */
+/* =========================
+Engineering Mentor - app.js
+Fixes:
+- Start buttons show/scroll to sections
+- PDF.js worker set (PDF extraction works)
+- LinkedIn review endpoint works
+========================= */
 
-const resumePdf = document.getElementById('resumePdf');
-const extractPdfBtn = document.getElementById('extractPdfBtn');
-const pdfStatus = document.getElementById('pdfStatus');
-const resumeText = document.getElementById('resumeText');
-const resumeTargetRole = document.getElementById('resumeTargetRole');
-const runResumeReviewBtn = document.getElementById('runResumeReviewBtn');
-const resumeRunStatus = document.getElementById('resumeRunStatus');
-const resumeResults = document.getElementById('resumeResults');
+const GOOGLE_BOOKING_LINK = ""; // paste your Google appointment URL here
 
-const linkedinText = document.getElementById('linkedinText');
-const linkedinTargetRole = document.getElementById('linkedinTargetRole');
-const runLinkedinReviewBtn = document.getElementById('runLinkedinReviewBtn');
-const linkedinRunStatus = document.getElementById('linkedinRunStatus');
-const linkedinResults = document.getElementById('linkedinResults');
+// Elements
+const startResumeBtn = document.getElementById("startResume");
+const startLinkedInBtn = document.getElementById("startLinkedIn");
 
-document.querySelectorAll('[data-scroll]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const sel = btn.getAttribute('data-scroll');
-    const el = document.querySelector(sel);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+const resumeSection = document.getElementById("resumeSection");
+const linkedinSection = document.getElementById("linkedinSection");
+
+const resumePdf = document.getElementById("resumePdf");
+const extractPdfBtn = document.getElementById("extractPdf");
+const pdfStatus = document.getElementById("pdfStatus");
+const resumeText = document.getElementById("resumeText");
+const runResumeReviewBtn = document.getElementById("runResumeReview");
+const resumeOutput = document.getElementById("resumeOutput");
+
+const linkedinText = document.getElementById("linkedinText");
+const linkedinTargetRole = document.getElementById("linkedinTargetRole");
+const runLinkedInReviewBtn = document.getElementById("runLinkedInReview");
+const linkedinOutput = document.getElementById("linkedinOutput");
+
+const bookMentorship = document.getElementById("bookMentorship");
+
+// Set booking link
+bookMentorship.href = GOOGLE_BOOKING_LINK || "#";
+if (!GOOGLE_BOOKING_LINK) {
+  bookMentorship.addEventListener("click", (e) => {
+    e.preventDefault();
+    alert("Paste your Google appointment URL into app.js (GOOGLE_BOOKING_LINK) and redeploy.");
   });
-});
-
-// Replace this once you paste your Google appointment schedule link
-const GOOGLE_BOOKING_LINK = ""; // e.g. "https://calendar.google.com/calendar/appointments/schedules/..."
-const bookBtn = document.getElementById('bookBtn');
-const bookBtn2 = document.getElementById('bookBtn2');
-
-function wireBookingLink() {
-  if (GOOGLE_BOOKING_LINK && GOOGLE_BOOKING_LINK.startsWith('http')) {
-    bookBtn.href = GOOGLE_BOOKING_LINK;
-    bookBtn.target = "_blank";
-    bookBtn.rel = "noopener";
-    bookBtn2.href = GOOGLE_BOOKING_LINK;
-    bookBtn2.target = "_blank";
-    bookBtn2.rel = "noopener";
-  }
 }
-wireBookingLink();
 
-function setStatus(el, msg) {
-  el.textContent = msg || "";
+// Helpers
+function showSection(sectionEl) {
+  sectionEl.classList.remove("hidden");
+  sectionEl.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function setOutput(el, html) {
+  el.innerHTML = html;
 }
 
 function escapeHtml(str) {
-  return (str || "")
+  return str
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
 }
 
-async function extractTextFromPdf(file) {
-  pdfStatus.textContent = "Loading PDF...";
-  const arrayBuffer = await file.arrayBuffer();
-
-  // pdf.js worker
-  if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.7.76/pdf.worker.min.js";
-  }
-
-  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-  let fullText = "";
-
-  for (let i = 1; i <= pdf.numPages; i++) {
-    setStatus(pdfStatus, `Extracting text… page ${i} of ${pdf.numPages}`);
-    const page = await pdf.getPage(i);
-    const content = await page.getTextContent();
-    const strings = content.items.map(it => it.str);
-    fullText += strings.join(" ") + "\n";
-  }
-
-  setStatus(pdfStatus, `Done. Extracted ~${fullText.length.toLocaleString()} characters.`);
-  return fullText.trim();
+function renderError(msg) {
+  return `<div class="notice"><strong>Action needed:</strong> ${escapeHtml(msg)}</div>`;
 }
 
-extractPdfBtn.addEventListener('click', async () => {
+// Start buttons
+startResumeBtn.addEventListener("click", () => showSection(resumeSection));
+startLinkedInBtn.addEventListener("click", () => showSection(linkedinSection));
+
+// PDF.js worker setup (this is the usual cause of extraction failures)
+if (window.pdfjsLib) {
+  // Match the same version you loaded in index.html
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+}
+
+// PDF extraction
+extractPdfBtn.addEventListener("click", async () => {
   try {
-    const file = resumePdf.files?.[0];
-    if (!file) {
-      setStatus(pdfStatus, "Please choose a PDF first.");
+    pdfStatus.textContent = "";
+
+    if (!resumePdf.files || !resumePdf.files[0]) {
+      pdfStatus.textContent = "Choose a PDF first.";
       return;
     }
-    if (file.type !== "application/pdf") {
-      setStatus(pdfStatus, "That file doesn’t look like a PDF.");
+
+    if (!window.pdfjsLib) {
+      pdfStatus.textContent = "PDF.js failed to load. Refresh the page and try again.";
       return;
     }
-    const txt = await extractTextFromPdf(file);
-    resumeText.value = txt;
+
+    const file = resumePdf.files[0];
+    const buffer = await file.arrayBuffer();
+
+    pdfStatus.textContent = "Extracting text…";
+
+    const loadingTask = pdfjsLib.getDocument({ data: buffer });
+    const pdf = await loadingTask.promise;
+
+    let fullText = "";
+
+    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+      const page = await pdf.getPage(pageNum);
+      const content = await page.getTextContent();
+      const strings = content.items.map((it) => it.str);
+      fullText += strings.join(" ") + "\n\n";
+    }
+
+    const cleaned = fullText.replace(/\s+\n/g, "\n").trim();
+
+    if (!cleaned || cleaned.length < 50) {
+      pdfStatus.textContent = "PDF extracted, but text looks empty. Use paste text instead.";
+      return;
+    }
+
+    resumeText.value = cleaned;
+    pdfStatus.textContent = "Extracted. Review the text and run the resume review below.";
   } catch (err) {
     console.error(err);
-    setStatus(pdfStatus, "PDF extraction failed. Use paste text instead.");
+    pdfStatus.textContent = "PDF extraction failed. Use paste text instead.";
   }
 });
 
+// API calls
 async function postJson(url, payload) {
   const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
   });
-  const data = await res.json().catch(() => ({}));
+
+  let data;
+  const text = await res.text();
+  try {
+    data = JSON.parse(text);
+  } catch {
+    data = { error: text || "Unknown error" };
+  }
+
   if (!res.ok) {
-    const msg = data?.error || `Request failed (${res.status})`;
+    const msg հավել = data?.error || `Request failed (${res.status})`;
     throw new Error(msg);
   }
+
   return data;
 }
 
-function verdictBadge(verdict) {
-  const v = (verdict || "").toLowerCase();
-  if (v.includes("ready")) return `<span class="badge good">Verdict: ${escapeHtml(verdict)}</span>`;
-  if (v.includes("not yet") || v.includes("unclear")) return `<span class="badge bad">Verdict: ${escapeHtml(verdict)}</span>`;
-  return `<span class="badge warn">Verdict: ${escapeHtml(verdict || "—")}</span>`;
-}
-
-function renderResumeResults(r) {
-  const breakdown = r.scoreBreakdown || {};
-  const scoreHtml = `
-    <div class="kv">
-      <div class="item"><div class="label">Overall score</div><div class="value">${escapeHtml(String(r.scoreOverall ?? "—"))}</div></div>
-      <div class="item"><div class="label">Role clarity</div><div class="value">${escapeHtml(String(breakdown.roleClarity ?? "—"))}</div></div>
-      <div class="item"><div class="label">Projects strength</div><div class="value">${escapeHtml(String(breakdown.projects ?? "—"))}</div></div>
-      <div class="item"><div class="label">Impact bullets</div><div class="value">${escapeHtml(String(breakdown.impactBullets ?? "—"))}</div></div>
-      <div class="item"><div class="label">Skills credibility</div><div class="value">${escapeHtml(String(breakdown.skillsCredibility ?? "—"))}</div></div>
-      <div class="item"><div class="label">ATS readability</div><div class="value">${escapeHtml(String(breakdown.atsReadability ?? "—"))}</div></div>
-    </div>
-  `;
-
-  const sections = (r.sectionCritique || []).map(s => `
-    <div class="result-block">
-      <h3>${escapeHtml(s.title || "Section")}</h3>
-      <div class="muted small">${escapeHtml(s.summary || "")}</div>
-      ${(s.findings?.length ? `<ul class="list">${s.findings.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : "")}
-    </div>
-  `).join("");
-
-  const rewrites = (r.rewriteExamples || []).map((x, idx) => `
-    <div class="result-block">
-      <h3>Rewrite Example ${idx + 1}: ${escapeHtml(x.label || "")}</h3>
-      <div class="copyrow">
-        <button class="btn ghost" data-copy="${escapeHtml(x.text || "")}">Copy</button>
-        <div class="codebox">${escapeHtml(x.text || "")}</div>
-      </div>
-    </div>
-  `).join("");
-
-  const plan = (r.next7DaysPlan || []);
-  const planHtml = plan.length
-    ? `<ol class="list">${plan.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ol>`
-    : `<div class="muted">No plan returned.</div>`;
-
-  resumeResults.innerHTML = `
-    <div class="result-block">
-      <h3>Readiness + Biggest Issue</h3>
-      <div class="copyrow">
-        ${verdictBadge(r.verdict)}
-        <span class="badge warn">Biggest issue: ${escapeHtml(r.biggestIssue || "—")}</span>
-      </div>
-      <p class="muted">${escapeHtml(r.realityCheck || "")}</p>
-    </div>
-
-    <div class="result-block">
-      <h3>Scorecard</h3>
-      ${scoreHtml}
-    </div>
-
-    <div class="result-block">
-      <h3>Section-by-section critique</h3>
-      <div class="muted small">This is written like a hiring manager scanning for signal. Fix the biggest issues first.</div>
-    </div>
-
-    ${sections}
-
-    <div class="result-block">
-      <h3>Rewrite Examples</h3>
-      <div class="muted small">Use these patterns across your resume. Copy and adjust for your actual work.</div>
-    </div>
-
-    ${rewrites}
-
-    <div class="result-block">
-      <h3>Your Next 7 Days Plan</h3>
-      ${planHtml}
-    </div>
-  `;
-
-  resumeResults.hidden = false;
-  hookCopyButtons(resumeResults);
-}
-
-function renderLinkedInResults(r) {
-  const headOpts = (r.headlineOptions || []).map((h, idx) => `
-    <div class="result-block">
-      <h3>Headline Option ${idx + 1}</h3>
-      <div class="copyrow">
-        <button class="btn ghost" data-copy="${escapeHtml(h)}">Copy</button>
-        <div class="codebox">${escapeHtml(h)}</div>
-      </div>
-    </div>
-  `).join("");
-
-  const about = `
-    <div class="result-block">
-      <h3>About Section Rewrite</h3>
-      <div class="copyrow">
-        <button class="btn ghost" data-copy="${escapeHtml(r.aboutRewrite || "")}">Copy</button>
-        <div class="codebox">${escapeHtml(r.aboutRewrite || "")}</div>
-      </div>
-    </div>
-  `;
-
-  const listsBlock = (title, arr) => `
-    <div class="result-block">
-      <h3>${escapeHtml(title)}</h3>
-      ${arr?.length ? `<ul class="list">${arr.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : `<div class="muted">None provided.</div>`}
-    </div>
-  `;
-
-  linkedinResults.innerHTML = `
-    <div class="result-block">
-      <h3>Positioning Verdict</h3>
-      <div class="copyrow">
-        ${verdictBadge(r.positioningVerdict || "—")}
-        <span class="badge warn">Biggest issue: ${escapeHtml(r.biggestIssue || "—")}</span>
-      </div>
-      <p class="muted">${escapeHtml(r.realityCheck || "")}</p>
-    </div>
-
-    ${headOpts}
-    ${about}
-
-    ${listsBlock("Experience fixes", r.experienceFixes)}
-    ${listsBlock("Project fixes", r.projectFixes)}
-    ${listsBlock("Skills cleanup", r.skillsCleanup)}
-    ${listsBlock("Network plan", r.networkPlan)}
-    ${listsBlock("Next steps", r.nextSteps)}
-  `;
-
-  linkedinResults.hidden = false;
-  hookCopyButtons(linkedinResults);
-}
-
-function hookCopyButtons(root) {
-  root.querySelectorAll('[data-copy]').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const txt = btn.getAttribute('data-copy') || "";
-      try {
-        await navigator.clipboard.writeText(txt);
-        btn.textContent = "Copied";
-        setTimeout(() => (btn.textContent = "Copy"), 900);
-      } catch {
-        // Fallback
-        const ta = document.createElement('textarea');
-        ta.value = txt;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        ta.remove();
-        btn.textContent = "Copied";
-        setTimeout(() => (btn.textContent = "Copy"), 900);
-      }
-    });
-  });
-}
-
-runResumeReviewBtn.addEventListener('click', async () => {
+// Resume review
+runResumeReviewBtn.addEventListener("click", async () => {
   try {
-    setStatus(resumeRunStatus, "");
-    resumeResults.hidden = true;
-
-    const txt = (resumeText.value || "").trim();
-    if (txt.length < 300) {
-      setStatus(resumeRunStatus, "Paste more resume text (or extract from PDF).");
+    const text = (resumeText.value || "").trim();
+    if (text.length < 50) {
+      setOutput(resumeOutput, renderError("Paste more resume text (at least a few sections) and try again."));
       return;
     }
 
-    setStatus(resumeRunStatus, "Generating review...");
+    setOutput(resumeOutput, `<div class="notice">Generating your resume review…</div>`);
+
     const data = await postJson("/.netlify/functions/reviewResume", {
-      text: txt,
-      targetRole: (resumeTargetRole.value || "").trim()
+      resumeText: text,
     });
 
-    setStatus(resumeRunStatus, "Done.");
-    renderResumeResults(data);
+    setOutput(resumeOutput, data.html || `<pre>${escapeHtml(JSON.stringify(data, null, 2))}</pre>`);
   } catch (err) {
     console.error(err);
-    setStatus(resumeRunStatus, err.message || "Resume review failed.");
+    setOutput(resumeOutput, renderError(err.message || "Resume review failed. Try again."));
   }
 });
 
-runLinkedinReviewBtn.addEventListener('click', async () => {
+// LinkedIn review
+runLinkedInReviewBtn.addEventListener("click", async () => {
   try {
-    setStatus(linkedinRunStatus, "");
-    linkedinResults.hidden = true;
+    const text = (linkedinText.value || "").trim();
+    const target = (linkedinTargetRole.value || "").trim();
 
-    const txt = (linkedinText.value || "").trim();
-    if (txt.length < 200) {
-      setStatus(linkedinRunStatus, "Paste more LinkedIn profile text.");
+    if (text.length < 50) {
+      setOutput(linkedinOutput, renderError("Paste your LinkedIn profile text (headline/about/experience) and try again."));
       return;
     }
 
-    setStatus(linkedinRunStatus, "Generating review...");
+    setOutput(linkedinOutput, `<div class="notice">Generating your LinkedIn review…</div>`);
+
     const data = await postJson("/.netlify/functions/reviewLinkedIn", {
-      text: txt,
-      targetRole: (linkedinTargetRole.value || "").trim()
+      linkedinText: text,
+      targetRole: target,
     });
 
-    setStatus(linkedinRunStatus, "Done.");
-    renderLinkedInResults(data);
+    setOutput(linkedinOutput, data.html || `<pre>${escapeHtml(JSON.stringify(data, null, 2))}</pre>`);
   } catch (err) {
     console.error(err);
-    setStatus(linkedinRunStatus, err.message || "LinkedIn review failed.");
+    setOutput(linkedinOutput, renderError(err.message || "LinkedIn review failed. Try again."));
   }
 });

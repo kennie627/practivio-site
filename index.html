@@ -8,7 +8,7 @@
 
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- PDF.js -->
+  <!-- PDF.js (core) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 
@@ -16,7 +16,6 @@
   <div class="page">
     <header class="profile-header">
       <div class="topbar">
-        <div class="brand-dot"></div>
         <div class="topbar-right">
           <span class="chip">Free tools</span>
           <span class="chip subtle">No upsells</span>
@@ -25,10 +24,14 @@
 
       <div class="profile-card">
         <div class="avatar-wrap">
-          <div class="avatar">
-            EM
-            <span class="plus-badge">+</span>
-          </div>
+          <!-- Uses your real photo -->
+          <img
+            class="avatar-img"
+            src="assets/profile.jpg"
+            alt="Engineering Mentor profile photo"
+            loading="eager"
+          />
+          <span class="plus-badge" aria-hidden="true">+</span>
         </div>
 
         <div class="profile-title">
@@ -58,10 +61,10 @@
         </p>
 
         <div class="pill-row">
-          <a class="pill" href="https://www.linkedin.com/in/davis-booth-81537391" target="_blank">
+          <a class="pill" href="https://www.linkedin.com/in/davis-booth-81537391" target="_blank" rel="noreferrer">
             Follow on LinkedIn
           </a>
-          <a class="pill" href="https://www.tiktok.com/@engineeringmentor" target="_blank">
+          <a class="pill" href="https://www.tiktok.com/@engineeringmentor" target="_blank" rel="noreferrer">
             Follow on TikTok
           </a>
           <a class="pill primary" href="#mentorship">
@@ -89,23 +92,76 @@
         </p>
       </section>
 
+      <!-- RESUME REVIEW -->
       <section id="resumeSection" class="card tool-section hidden">
-        <h2>Resume Review</h2>
-        <textarea id="resumeText" rows="12" placeholder="Paste your resume text here..."></textarea>
-        <button id="runResumeReview" class="btn primary wide">Generate Detailed Resume Review</button>
+        <div class="card-head">
+          <h2>Resume Review</h2>
+          <span class="badge">Instant</span>
+        </div>
+
+        <p class="muted">
+          Upload a PDF or paste your resume text. Then generate a detailed review instantly.
+        </p>
+
+        <div class="split">
+          <div class="panel">
+            <h3>Option A: Upload PDF</h3>
+            <p class="muted small">
+              We extract text in your browser (PDF.js). If extraction looks messy, use paste text instead.
+            </p>
+
+            <input type="file" id="resumePdf" accept="application/pdf" />
+            <button id="extractPdf" class="btn">Extract Text From PDF</button>
+            <p id="pdfStatus" class="status"></p>
+          </div>
+
+          <div class="panel">
+            <h3>Option B: Paste resume text</h3>
+            <textarea id="resumeText" rows="12" placeholder="Paste your resume text here..."></textarea>
+          </div>
+        </div>
+
+        <button id="runResumeReview" class="btn primary wide">
+          Generate Detailed Resume Review
+        </button>
+
         <div id="resumeOutput" class="output"></div>
       </section>
 
+      <!-- LINKEDIN REVIEW -->
       <section id="linkedinSection" class="card tool-section hidden">
-        <h2>LinkedIn Profile Review</h2>
+        <div class="card-head">
+          <h2>LinkedIn Profile Review</h2>
+          <span class="badge">Instant</span>
+        </div>
+
+        <p class="muted">
+          Paste your LinkedIn profile text (headline, about, experience, projects, skills). Instant detailed review.
+        </p>
+
         <textarea id="linkedinText" rows="12" placeholder="Paste your LinkedIn profile text here..."></textarea>
-        <input id="linkedinTargetRole" class="input" placeholder="Target role (optional)" />
-        <button id="runLinkedInReview" class="btn primary wide">Generate Detailed LinkedIn Review</button>
+
+        <input
+          type="text"
+          id="linkedinTargetRole"
+          class="input"
+          placeholder="Target role (optional, but helps)"
+        />
+
+        <button id="runLinkedInReview" class="btn primary wide">
+          Generate Detailed LinkedIn Review
+        </button>
+
         <div id="linkedinOutput" class="output"></div>
       </section>
 
+      <!-- MENTORSHIP -->
       <section id="mentorship" class="card mentor-section">
-        <h2>Mentorship</h2>
+        <div class="card-head">
+          <h2>Mentorship</h2>
+          <span class="badge alt">Free</span>
+        </div>
+
         <p class="muted">
           Want help implementing the fixes? Book a one-on-one session with Davis — engineer, hiring-side reviewer, and mentor.
         </p>
@@ -114,9 +170,13 @@
           Free booking — no upsells, no paid services, no pressure.
         </div>
 
-        <a id="bookMentorship" class="btn primary wide" target="_blank">
+        <a id="bookMentorship" class="btn primary wide" target="_blank" rel="noreferrer">
           Book a mentorship call
         </a>
+
+        <p class="small muted" style="margin-top:10px;">
+          If the booking button doesn’t open yet, paste your Google appointment URL into app.js.
+        </p>
       </section>
 
       <footer class="footer">
