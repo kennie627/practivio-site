@@ -8,14 +8,12 @@
 
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- PDF.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 
 <body>
   <div class="page">
 
-    <!-- HEADER -->
     <header class="profile-header">
       <div class="profile-card">
         <div class="avatar-wrap">
@@ -43,7 +41,6 @@
 
     <main class="main">
 
-      <!-- INTRO -->
       <section class="card intro">
         <h2>Free Resume + LinkedIn Profile Review</h2>
         <p class="muted">
@@ -51,19 +48,25 @@
           The review is detailed, honest, and written from a real hiring perspective.
         </p>
 
-        <button id="startFunnel" class="btn primary wide">Get Started</button>
+        <button id="startFunnel" class="btn primary wide" type="button">
+          Get Started
+        </button>
 
         <p class="privacy">
           Privacy: PDFs are processed in your browser. Only extracted text is sent. No files stored.
         </p>
       </section>
 
-      <!-- STEP 1 -->
       <section id="step1" class="card tool-section hidden">
         <h2>Step 1 — Follow on TikTok</h2>
         <p class="muted">This helps keep the reviews free.</p>
 
-        <a class="btn" href="https://www.tiktok.com/@engineeringmentor" target="_blank" rel="noreferrer">
+        <a
+          class="btn"
+          href="https://www.tiktok.com/@engineeringmentor"
+          target="_blank"
+          rel="noreferrer"
+        >
           Follow @engineeringmentor on TikTok
         </a>
 
@@ -72,15 +75,21 @@
           I’ve followed on TikTok
         </label>
 
-        <button id="toStep2" class="btn primary wide" disabled>Continue</button>
+        <button id="toStep2" class="btn primary wide" type="button" disabled>
+          Continue
+        </button>
       </section>
 
-      <!-- STEP 2 -->
       <section id="step2" class="card tool-section hidden">
         <h2>Step 2 — Follow on LinkedIn</h2>
         <p class="muted">This helps us reach more engineers.</p>
 
-        <a class="btn" href="https://www.linkedin.com/in/davis-booth-81537391" target="_blank" rel="noreferrer">
+        <a
+          class="btn"
+          href="https://www.linkedin.com/in/davis-booth-81537391"
+          target="_blank"
+          rel="noreferrer"
+        >
           Follow on LinkedIn
         </a>
 
@@ -89,10 +98,11 @@
           I’ve followed on LinkedIn
         </label>
 
-        <button id="toStep3" class="btn primary wide" disabled>Continue</button>
+        <button id="toStep3" class="btn primary wide" type="button" disabled>
+          Continue
+        </button>
       </section>
 
-      <!-- STEP 3 -->
       <section id="step3" class="card tool-section hidden">
         <h2>Step 3 — Upload Your Files</h2>
         <p class="muted">
@@ -119,14 +129,13 @@
           placeholder="Target role (optional but strongly recommended)"
         />
 
-        <button id="runCombinedReview" class="btn primary wide">
+        <button id="runCombinedReview" class="btn primary wide" type="button">
           Generate Comprehensive Review
         </button>
 
         <div id="combinedOutput" class="output"></div>
       </section>
 
-      <!-- STEP 4 -->
       <section id="mentorship" class="card mentor-section hidden">
         <h2>Want Help Applying This?</h2>
 
