@@ -33,6 +33,8 @@ body{
 
 .profile-header{
   padding:20px 16px 8px;
+  position:relative;
+  z-index:1;
 }
 
 .profile-card{
@@ -72,6 +74,7 @@ body{
   background:linear-gradient(90deg,var(--cyan),var(--pink));
   color:#000;
   border:2px solid #fff;
+  pointer-events:none; /* decorative only */
 }
 
 .profile-title h1{
@@ -102,6 +105,8 @@ body{
 
 .main{
   padding:0 16px 44px;
+  position:relative;
+  z-index:2;
 }
 
 .card{
@@ -126,7 +131,7 @@ body{
   background:#fff;
   cursor:pointer;
   font-weight:600;
-  transition:all .15s ease;
+  transition:transform .15s ease;
 }
 
 .btn:hover{
@@ -194,11 +199,9 @@ textarea,
   background:#fff;
 }
 
-.hidden{
-  display:none;
-}
+.hidden{ display:none; }
 
-/* CHECKBOX GATE */
+/* CHECKBOX */
 .checkbox{
   display:flex;
   align-items:center;
@@ -230,27 +233,21 @@ textarea,
   background:#fff;
 }
 
-.score .n{
-  font-weight:800;
-  font-size:18px;
-}
+.score .n{ font-weight:800; font-size:18px; }
+.score .l{ font-size:12px; color:var(--muted); }
 
-.score .l{
-  font-size:12px;
-  color:var(--muted);
-}
-
-/* REVIEW CONTENT */
+/* REVIEW */
 .review h2{ margin-top:0; }
 .review h3{ margin-top:18px; }
 .review ul,
 .review ol{ margin-top:8px; }
 
-/* MENTORSHIP SECTION */
+/* MENTORSHIP */
 .mentor-section{
   border:2px solid #000;
 }
 
+/* FOOTER */
 .footer{
   text-align:center;
   font-size:13px;
@@ -263,25 +260,10 @@ textarea,
   .split{ grid-template-columns:1fr; }
   .scoregrid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
 }
+
+/* FINAL CLICK GUARANTEE */
 a,
-button {
-  position: relative;
-  z-index: 50;
-}
-
-.profile-card,
-.profile-header,
-.avatar-wrap {
-  pointer-events: none;
-}
-
-.profile-card a,
-.profile-card button,
-.main a,
-.main button {
-  pointer-events: auto;
-}
-
-.plus-badge {
-  pointer-events: none;
+button{
+  position:relative;
+  z-index:10;
 }
