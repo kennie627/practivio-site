@@ -14,14 +14,12 @@
 
 <body>
   <div class="page">
+
+    <!-- HEADER -->
     <header class="profile-header">
       <div class="profile-card">
         <div class="avatar-wrap">
-          <img
-            class="avatar-img"
-            src="assets/profile.jpg"
-            alt="Engineering Mentor profile photo"
-          />
+          <img class="avatar-img" src="assets/profile.jpg" alt="Engineering Mentor profile photo" />
           <span class="plus-badge" aria-hidden="true">+</span>
         </div>
 
@@ -31,170 +29,129 @@
         </div>
 
         <div class="stats">
-          <div class="stat">
-            <div class="num">Free</div>
-            <div class="lbl">Reviews</div>
-          </div>
-          <div class="stat">
-            <div class="num">Fast</div>
-            <div class="lbl">Fixes</div>
-          </div>
-          <div class="stat">
-            <div class="num">Real</div>
-            <div class="lbl">Hiring signal</div>
-          </div>
+          <div class="stat"><div class="num">Free</div><div class="lbl">Reviews</div></div>
+          <div class="stat"><div class="num">Fast</div><div class="lbl">Fixes</div></div>
+          <div class="stat"><div class="num">Real</div><div class="lbl">Hiring signal</div></div>
         </div>
 
         <p class="bio">
           Former NASA and Rocket Engineer<br />
-          Helping engineers and engineering students<br />
-          Click below to get started
+          Helping engineers and engineering students
         </p>
-
-        <div class="pill-row">
-          <a class="pill" href="https://www.linkedin.com/in/davis-booth-81537391" target="_blank" rel="noreferrer">
-            Follow on LinkedIn
-          </a>
-          <a class="pill" href="https://www.tiktok.com/@engineeringmentor" target="_blank" rel="noreferrer">
-            Follow on TikTok
-          </a>
-          <a class="pill primary" href="#mentorship">
-            Book mentorship
-          </a>
-        </div>
       </div>
     </header>
 
     <main class="main">
+
+      <!-- INTRO -->
       <section class="card intro">
-        <h2>Free Resume Reviews + LinkedIn Profile Reviews</h2>
+        <h2>Free Resume + LinkedIn Profile Review</h2>
         <p class="muted">
-          Upload a PDF or paste text. Get a detailed review instantly — written from a hiring-manager reality check,
-          with clear fixes, rewrite examples, and a clear next-steps plan.
+          To keep this free and sustainable, we ask for two quick steps first.
+          The review is detailed, honest, and written from a real hiring perspective.
         </p>
 
-        <div class="start-buttons">
-          <button id="startResume" class="btn primary" type="button">Start Resume Review</button>
-          <button id="startLinkedIn" class="btn" type="button">Start LinkedIn Review</button>
-        </div>
+        <button id="startFunnel" class="btn primary wide">Get Started</button>
 
         <p class="privacy">
-          Privacy: your PDF is processed in your browser and only extracted text is sent for review. No files stored.
+          Privacy: PDFs are processed in your browser. Only extracted text is sent. No files stored.
         </p>
       </section>
 
-      <!-- RESUME REVIEW -->
-      <section id="resumeSection" class="card tool-section hidden">
-        <div class="card-head">
-          <h2>Resume Review</h2>
-          <span class="badge">Instant</span>
-        </div>
+      <!-- STEP 1 -->
+      <section id="step1" class="card tool-section hidden">
+        <h2>Step 1 — Follow on TikTok</h2>
+        <p class="muted">This helps keep the reviews free.</p>
 
+        <a class="btn" href="https://www.tiktok.com/@engineeringmentor" target="_blank" rel="noreferrer">
+          Follow @engineeringmentor on TikTok
+        </a>
+
+        <label class="checkbox">
+          <input type="checkbox" id="confirmTikTok" />
+          I’ve followed on TikTok
+        </label>
+
+        <button id="toStep2" class="btn primary wide" disabled>Continue</button>
+      </section>
+
+      <!-- STEP 2 -->
+      <section id="step2" class="card tool-section hidden">
+        <h2>Step 2 — Follow on LinkedIn</h2>
+        <p class="muted">This helps us reach more engineers.</p>
+
+        <a class="btn" href="https://www.linkedin.com/in/davis-booth-81537391" target="_blank" rel="noreferrer">
+          Follow on LinkedIn
+        </a>
+
+        <label class="checkbox">
+          <input type="checkbox" id="confirmLinkedIn" />
+          I’ve followed on LinkedIn
+        </label>
+
+        <button id="toStep3" class="btn primary wide" disabled>Continue</button>
+      </section>
+
+      <!-- STEP 3 -->
+      <section id="step3" class="card tool-section hidden">
+        <h2>Step 3 — Upload Your Files</h2>
         <p class="muted">
-          Upload a PDF or paste your resume text. Then generate a detailed review instantly.
+          Upload both for a comprehensive report.  
+          Missing one? The review will still run.
         </p>
 
         <div class="split">
           <div class="panel">
-            <h3>Option A: Upload Resume PDF</h3>
-            <p class="muted small">
-              We extract text in your browser. If extraction looks messy, use paste text instead.
-            </p>
-
+            <h3>Resume PDF</h3>
             <input type="file" id="resumePdf" accept="application/pdf" />
-            <button id="extractPdf" class="btn" type="button">Extract Text From PDF</button>
-            <p id="pdfStatus" class="status"></p>
           </div>
 
           <div class="panel">
-            <h3>Option B: Paste resume text</h3>
-            <textarea id="resumeText" rows="12" placeholder="Paste your resume text here..."></textarea>
-          </div>
-        </div>
-
-        <input
-          type="text"
-          id="resumeTargetRole"
-          class="input"
-          placeholder="Target role (optional, but helps) e.g., Entry-level Mechanical Engineer, Test Engineer, Aerospace Systems Engineer"
-        />
-
-        <button id="runResumeReview" class="btn primary wide" type="button">
-          Generate Detailed Resume Review
-        </button>
-
-        <div id="resumeOutput" class="output"></div>
-      </section>
-
-      <!-- LINKEDIN REVIEW -->
-      <section id="linkedinSection" class="card tool-section hidden">
-        <div class="card-head">
-          <h2>LinkedIn Profile Review</h2>
-          <span class="badge">Instant</span>
-        </div>
-
-        <p class="muted">
-          Best path: export your LinkedIn profile as a PDF, upload it here, then generate your review.
-        </p>
-
-        <div class="notice">
-          <strong>How to download your LinkedIn PDF (Desktop):</strong><br />
-          Open your profile → click <strong>More</strong> → <strong>Save to PDF</strong> → then upload the PDF here.
-          <div class="small muted" style="margin-top:8px;">
-            If you don’t see “Save to PDF” on mobile, use a computer or LinkedIn desktop site.
-          </div>
-        </div>
-
-        <div class="split">
-          <div class="panel">
-            <h3>Option A: Upload LinkedIn PDF</h3>
+            <h3>LinkedIn Profile PDF</h3>
             <input type="file" id="linkedinPdf" accept="application/pdf" />
-            <button id="extractLinkedinPdf" class="btn" type="button">Extract Text From LinkedIn PDF</button>
-            <p id="linkedinPdfStatus" class="status"></p>
-          </div>
-
-          <div class="panel">
-            <h3>Option B: Paste LinkedIn profile text</h3>
-            <textarea id="linkedinText" rows="12" placeholder="Paste your LinkedIn profile text here..."></textarea>
           </div>
         </div>
 
         <input
           type="text"
-          id="linkedinTargetRole"
+          id="targetRole"
           class="input"
-          placeholder="Target role (optional, but helps) e.g., Electrical Engineer, Manufacturing Engineer, Systems Engineer"
+          placeholder="Target role (optional but strongly recommended)"
         />
 
-        <button id="runLinkedInReview" class="btn primary wide" type="button">
-          Generate Detailed LinkedIn Review
+        <button id="runCombinedReview" class="btn primary wide">
+          Generate Comprehensive Review
         </button>
 
-        <div id="linkedinOutput" class="output"></div>
+        <div id="combinedOutput" class="output"></div>
       </section>
 
-      <!-- MENTORSHIP -->
-      <section id="mentorship" class="card mentor-section">
-        <div class="card-head">
-          <h2>Mentorship</h2>
-          <span class="badge alt">Free</span>
-        </div>
+      <!-- STEP 4 -->
+      <section id="mentorship" class="card mentor-section hidden">
+        <h2>Want Help Applying This?</h2>
 
         <p class="muted">
-          Want help implementing the fixes? Book a one-on-one session with Davis.
+          If you want help prioritizing fixes or deciding next steps,
+          I offer affordable one-on-one mentorship.
         </p>
 
         <div class="notice">
-          Free booking — no upsells, no paid services, no pressure.
+          15-minute focused session — $24.99<br />
+          No upsells. No pressure.
         </div>
 
-        <a id="bookMentorship" class="btn primary wide" target="_blank" rel="noreferrer">
-          Book a mentorship call
+        <a
+          class="btn primary wide"
+          href="https://buy.stripe.com/7sY8wR3Vv6At0vjc5q6g807"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Book 15-Minute Mentorship
         </a>
       </section>
 
       <footer class="footer">
-        Engineering Mentor • Built for engineering students and early-career engineers • Instant reviews • No paid services
+        Engineering Mentor • Built for engineers • Free reviews • Real hiring signal
       </footer>
     </main>
   </div>
