@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>Engineering Mentor — Free Resume & LinkedIn Reviews</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Free, instant resume and LinkedIn reviews from a real engineering hiring perspective. Built by Engineering Mentor." />
+  <meta name="description" content="Free, instant resume and LinkedIn reviews from a real engineering hiring perspective." />
 
   <link rel="stylesheet" href="styles.css" />
 
@@ -13,127 +13,117 @@
 </head>
 
 <body>
-  <header class="hero">
-    <h1>Engineering Mentor</h1>
-    <p class="tagline">
-      Free, instant resume + LinkedIn reviews from a real engineering hiring perspective
-    </p>
-
-    <p class="subtext">
-      Upload a resume or LinkedIn profile and get an immediate, no-BS review written from real engineering hiring experience —
-      with specific fixes, rewrite examples, and a clear 7-day improvement plan.
-    </p>
-
-    <p class="credibility">
-      Built by an engineer with aerospace, NASA, and launch systems experience.
-    </p>
-
-    <div class="cta-row">
-      <a href="https://www.linkedin.com/in/davis-booth-81537391" target="_blank" class="btn secondary">
-        Follow Davis on LinkedIn
-      </a>
-      <a href="https://www.tiktok.com/@engineeringmentor" target="_blank" class="btn secondary">
-        Follow Davis on TikTok
-      </a>
-      <a href="#mentorship" class="btn primary">
-        Book mentorship
-      </a>
-    </div>
-  </header>
-
-  <main>
-    <section class="intro">
-      <h2>Free Resume Reviews + LinkedIn Profile Reviews</h2>
-      <p>
-        Upload a PDF or paste text. Get a detailed review immediately — written from a hiring-manager reality check,
-        with clear fixes, rewrite examples, and a 7-day plan.
-      </p>
-
-      <div class="start-buttons">
-        <button id="startResume" class="btn primary">Start Resume Review</button>
-        <button id="startLinkedIn" class="btn secondary">Start LinkedIn Review</button>
+  <div class="page">
+    <header class="profile-header">
+      <div class="topbar">
+        <div class="brand-dot"></div>
+        <div class="topbar-right">
+          <span class="chip">Free tools</span>
+          <span class="chip subtle">No upsells</span>
+        </div>
       </div>
 
-      <p class="privacy">
-        Privacy: your PDF is processed in your browser and only extracted text is sent for analysis. No files stored.
-      </p>
-    </section>
+      <div class="profile-card">
+        <div class="avatar-wrap">
+          <div class="avatar">
+            EM
+            <span class="plus-badge">+</span>
+          </div>
+        </div>
 
-    <!-- RESUME REVIEW -->
-    <section id="resumeSection" class="tool-section hidden">
-      <h2>Resume Review</h2>
-      <p>
-        Upload a PDF or paste your resume text. Then generate a detailed review instantly.
-      </p>
+        <div class="profile-title">
+          <h1>engineeringmentor</h1>
+          <p class="handle">@engineeringmentor</p>
+        </div>
 
-      <div class="option">
-        <h3>Option A: Upload PDF</h3>
-        <p>
-          We extract text in your browser (PDF.js). If extraction looks messy, use paste text instead.
+        <div class="stats">
+          <div class="stat">
+            <div class="num">8.2K+</div>
+            <div class="lbl">Followers</div>
+          </div>
+          <div class="stat">
+            <div class="num">600K+</div>
+            <div class="lbl">Likes</div>
+          </div>
+          <div class="stat">
+            <div class="num">Free</div>
+            <div class="lbl">Reviews</div>
+          </div>
+        </div>
+
+        <p class="bio">
+          Former NASA and Rocket Engineer<br />
+          Helping engineers and engineering students<br />
+          Click below to get started
         </p>
 
-        <input type="file" id="resumePdf" accept="application/pdf" />
-        <button id="extractPdf" class="btn secondary">Extract Text From PDF</button>
-        <p id="pdfStatus" class="status"></p>
+        <div class="pill-row">
+          <a class="pill" href="https://www.linkedin.com/in/davis-booth-81537391" target="_blank">
+            Follow on LinkedIn
+          </a>
+          <a class="pill" href="https://www.tiktok.com/@engineeringmentor" target="_blank">
+            Follow on TikTok
+          </a>
+          <a class="pill primary" href="#mentorship">
+            Book mentorship
+          </a>
+        </div>
       </div>
+    </header>
 
-      <div class="option">
-        <h3>Option B: Paste resume text</h3>
-        <textarea id="resumeText" rows="14" placeholder="Paste your resume text here..."></textarea>
-      </div>
+    <main class="main">
+      <section class="card intro">
+        <h2>Free Resume Reviews + LinkedIn Profile Reviews</h2>
+        <p class="muted">
+          Upload a PDF or paste text. Get a detailed review instantly — written from a hiring-manager reality check,
+          with clear fixes, rewrite examples, and a 7-day plan.
+        </p>
 
-      <button id="runResumeReview" class="btn primary">
-        Generate Detailed Resume Review
-      </button>
+        <div class="start-buttons">
+          <button id="startResume" class="btn primary">Start Resume Review</button>
+          <button id="startLinkedIn" class="btn">Start LinkedIn Review</button>
+        </div>
 
-      <div id="resumeOutput" class="output"></div>
-    </section>
+        <p class="privacy">
+          Privacy: your PDF is processed in your browser and only extracted text is sent for analysis. No files stored.
+        </p>
+      </section>
 
-    <!-- LINKEDIN REVIEW -->
-    <section id="linkedinSection" class="tool-section hidden">
-      <h2>LinkedIn Profile Review</h2>
-      <p>
-        Paste your LinkedIn profile text (headline, about, experience, projects, skills). Instant detailed review.
-      </p>
+      <section id="resumeSection" class="card tool-section hidden">
+        <h2>Resume Review</h2>
+        <textarea id="resumeText" rows="12" placeholder="Paste your resume text here..."></textarea>
+        <button id="runResumeReview" class="btn primary wide">Generate Detailed Resume Review</button>
+        <div id="resumeOutput" class="output"></div>
+      </section>
 
-      <textarea id="linkedinText" rows="14" placeholder="Paste your LinkedIn profile text here..."></textarea>
+      <section id="linkedinSection" class="card tool-section hidden">
+        <h2>LinkedIn Profile Review</h2>
+        <textarea id="linkedinText" rows="12" placeholder="Paste your LinkedIn profile text here..."></textarea>
+        <input id="linkedinTargetRole" class="input" placeholder="Target role (optional)" />
+        <button id="runLinkedInReview" class="btn primary wide">Generate Detailed LinkedIn Review</button>
+        <div id="linkedinOutput" class="output"></div>
+      </section>
 
-      <input
-        type="text"
-        id="linkedinTargetRole"
-        placeholder="Target role (optional, but helps)"
-      />
+      <section id="mentorship" class="card mentor-section">
+        <h2>Mentorship</h2>
+        <p class="muted">
+          Want help implementing the fixes? Book a one-on-one session with Davis — engineer, hiring-side reviewer, and mentor.
+        </p>
 
-      <button id="runLinkedInReview" class="btn primary">
-        Generate Detailed LinkedIn Review
-      </button>
+        <div class="notice">
+          Free booking — no upsells, no paid services, no pressure.
+        </div>
 
-      <div id="linkedinOutput" class="output"></div>
-    </section>
+        <a id="bookMentorship" class="btn primary wide" target="_blank">
+          Book a mentorship call
+        </a>
+      </section>
 
-    <!-- MENTORSHIP -->
-    <section id="mentorship" class="mentor-section">
-      <h2>Mentorship</h2>
-      <p>
-        Want help implementing the fixes? Book a one-on-one session with Davis —
-        engineer, hiring-side reviewer, and mentor.
-      </p>
-
-      <p class="free-note">
-        Free booking — no upsells, no paid services, no pressure.
-      </p>
-
-      <a id="bookMentorship" class="btn primary" target="_blank">
-        Book a mentorship call
-      </a>
-    </section>
-  </main>
-
-  <footer>
-    <p>
-      Engineering Mentor • Built for engineering students and early-career engineers • Instant reviews • No paid services
-    </p>
-  </footer>
+      <footer class="footer">
+        Engineering Mentor • Built for engineering students and early-career engineers • Instant reviews • No paid services
+      </footer>
+    </main>
+  </div>
 
   <script src="app.js"></script>
 </body>
