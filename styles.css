@@ -72,6 +72,7 @@ body{
   background:linear-gradient(90deg,var(--cyan),var(--pink));
   color:#000;
   border:2px solid #fff;
+  pointer-events:none;
 }
 
 .profile-title h1{
@@ -112,22 +113,34 @@ body{
   margin-top:18px;
 }
 
-.card h2{ margin-top:0; }
+.card h2,
+.card h3{
+  margin-top:0;
+}
 
 .muted{ color:var(--muted); }
 .small{ font-size:12px; }
 
+/* BUTTONS + LINKS (CLICK SAFE) */
 .btn{
+  display:inline-block;
+  width:auto;
   padding:12px 16px;
   border-radius:12px;
   border:1px solid var(--line);
   background:#fff;
   cursor:pointer;
   font-weight:600;
-  transition:transform .15s ease;
+  text-decoration:none;
+  text-align:center;
+  color:var(--text);
+  transition:transform .15s ease, box-shadow .15s ease;
 }
 
-.btn:hover{ transform:translateY(-1px); }
+.btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 14px rgba(0,0,0,.08);
+}
 
 .btn.primary{
   background:var(--btn);
@@ -140,6 +153,7 @@ body{
   border-color:var(--btnDisabled);
   cursor:not-allowed;
   transform:none;
+  box-shadow:none;
 }
 
 .btn.wide{
@@ -147,13 +161,7 @@ body{
   margin-top:12px;
 }
 
-a.btn{
-  display:inline-block;
-  text-align:center;
-  text-decoration:none;
-  color:inherit;
-}
-
+/* FORM ELEMENTS */
 textarea,
 .input{
   width:100%;
@@ -175,6 +183,7 @@ textarea,
   font-size:14px;
 }
 
+/* LAYOUT */
 .split{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -191,6 +200,7 @@ textarea,
 
 .hidden{ display:none; }
 
+/* CHECKBOX */
 .checkbox{
   display:flex;
   align-items:center;
@@ -205,10 +215,12 @@ textarea,
   accent-color:#111;
 }
 
+/* MENTORSHIP */
 .mentor-section{
   border:2px solid #000;
 }
 
+/* FOOTER */
 .footer{
   text-align:center;
   font-size:13px;
@@ -216,6 +228,7 @@ textarea,
   margin-top:34px;
 }
 
+/* MOBILE */
 @media (max-width:760px){
   .split{ grid-template-columns:1fr; }
 }
