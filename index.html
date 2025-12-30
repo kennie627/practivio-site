@@ -1,126 +1,140 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Practivio — Free Resume + LinkedIn Reviews</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <header class="wrap header">
-    <div class="brand">
-      <div class="logo">P</div>
-      <div>
-        <div class="brandname">Practivio</div>
-        <div class="brandtag">Free, instant, detailed resume + LinkedIn reviews</div>
-      </div>
-    </div>
+  <meta charset="UTF-8" />
+  <title>Engineering Mentor — Free Resume & LinkedIn Reviews</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Free, instant resume and LinkedIn reviews from a real engineering hiring perspective. Built by Engineering Mentor." />
 
-    <div class="header-actions">
-      <a class="btn ghost" href="https://www.linkedin.com/in/davis-booth-81537391" target="_blank" rel="noopener">Follow on LinkedIn</a>
-      <a class="btn ghost" href="https://www.tiktok.com/@engineeringmentor" target="_blank" rel="noopener">Follow on TikTok</a>
-      <a class="btn" id="bookBtn" href="#book">Book mentorship</a>
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+
+<body>
+  <header class="hero">
+    <h1>Engineering Mentor</h1>
+    <p class="tagline">
+      Free, instant resume + LinkedIn reviews from a real engineering hiring perspective
+    </p>
+
+    <p class="subtext">
+      Upload a resume or LinkedIn profile and get an immediate, no-BS review written from real engineering hiring experience —
+      with specific fixes, rewrite examples, and a clear 7-day improvement plan.
+    </p>
+
+    <p class="credibility">
+      Built by an engineer with aerospace, NASA, and launch systems experience.
+    </p>
+
+    <div class="cta-row">
+      <a href="https://www.linkedin.com/in/davis-booth-81537391" target="_blank" class="btn secondary">
+        Follow Davis on LinkedIn
+      </a>
+      <a href="https://www.tiktok.com/@engineeringmentor" target="_blank" class="btn secondary">
+        Follow Davis on TikTok
+      </a>
+      <a href="#mentorship" class="btn primary">
+        Book mentorship
+      </a>
     </div>
   </header>
 
-  <main class="wrap">
-    <section class="hero">
-      <h1>Free Resume Reviews + LinkedIn Profile Reviews</h1>
+  <main>
+    <section class="intro">
+      <h2>Free Resume Reviews + LinkedIn Profile Reviews</h2>
       <p>
         Upload a PDF or paste text. Get a detailed review immediately — written from a hiring-manager reality check,
         with clear fixes, rewrite examples, and a 7-day plan.
       </p>
 
-      <div class="hero-cta">
-        <button class="btn" data-scroll="#resume">Start Resume Review</button>
-        <button class="btn ghost" data-scroll="#linkedin">Start LinkedIn Review</button>
+      <div class="start-buttons">
+        <button id="startResume" class="btn primary">Start Resume Review</button>
+        <button id="startLinkedIn" class="btn secondary">Start LinkedIn Review</button>
       </div>
 
-      <div class="note">
+      <p class="privacy">
         Privacy: your PDF is processed in your browser and only extracted text is sent for analysis. No files stored.
-      </div>
+      </p>
     </section>
 
-    <section class="panel" id="resume">
-      <div class="panel-head">
-        <h2>Resume Review</h2>
-        <p class="muted">Upload a PDF or paste your resume text. Then generate a detailed review instantly.</p>
-      </div>
+    <!-- RESUME REVIEW -->
+    <section id="resumeSection" class="tool-section hidden">
+      <h2>Resume Review</h2>
+      <p>
+        Upload a PDF or paste your resume text. Then generate a detailed review instantly.
+      </p>
 
-      <div class="grid2">
-        <div class="card">
-          <h3>Option A: Upload PDF</h3>
-          <p class="muted">We extract text in your browser (PDF.js). If extraction looks messy, use paste text instead.</p>
-          <input type="file" id="resumePdf" accept="application/pdf" />
-          <button class="btn" id="extractPdfBtn">Extract Text From PDF</button>
-          <div class="small muted" id="pdfStatus"></div>
-        </div>
-
-        <div class="card">
-          <h3>Option B: Paste resume text</h3>
-          <textarea id="resumeText" rows="10" placeholder="Paste your resume text here..."></textarea>
-
-          <div class="row">
-            <label class="small muted">Target role (optional, but helps)</label>
-            <input id="resumeTargetRole" type="text" placeholder="e.g., Entry-level Mechanical Engineer, Test Engineer, Aerospace Systems Engineer" />
-          </div>
-
-          <button class="btn" id="runResumeReviewBtn">Generate Detailed Resume Review</button>
-          <div class="small muted" id="resumeRunStatus"></div>
-        </div>
-      </div>
-
-      <div class="results" id="resumeResults" hidden></div>
-    </section>
-
-    <section class="panel" id="linkedin">
-      <div class="panel-head">
-        <h2>LinkedIn Profile Review</h2>
-        <p class="muted">Paste your LinkedIn profile text (headline, about, experience, projects, skills). Instant detailed review.</p>
-      </div>
-
-      <div class="card">
-        <textarea id="linkedinText" rows="12" placeholder="Paste LinkedIn profile content here..."></textarea>
-
-        <div class="row">
-          <label class="small muted">Target role (optional, but helps)</label>
-          <input id="linkedinTargetRole" type="text" placeholder="e.g., Entry-level Electrical Engineer, Manufacturing Engineer, Software Engineer" />
-        </div>
-
-        <button class="btn" id="runLinkedinReviewBtn">Generate Detailed LinkedIn Review</button>
-        <div class="small muted" id="linkedinRunStatus"></div>
-      </div>
-
-      <div class="results" id="linkedinResults" hidden></div>
-    </section>
-
-    <section class="panel" id="book">
-      <div class="panel-head">
-        <h2>Mentorship</h2>
-        <p class="muted">
-          Want help implementing the fixes? Book a one-on-one session.
-          (We’ll swap this button to your Google appointment schedule link.)
+      <div class="option">
+        <h3>Option A: Upload PDF</h3>
+        <p>
+          We extract text in your browser (PDF.js). If extraction looks messy, use paste text instead.
         </p>
+
+        <input type="file" id="resumePdf" accept="application/pdf" />
+        <button id="extractPdf" class="btn secondary">Extract Text From PDF</button>
+        <p id="pdfStatus" class="status"></p>
       </div>
 
-      <div class="card row-between">
-        <div>
-          <div class="big">Book a mentorship call</div>
-          <div class="muted small">Free booking link placeholder until you paste your Google appointment URL.</div>
-        </div>
-        <a class="btn" id="bookBtn2" href="#book">Book now</a>
+      <div class="option">
+        <h3>Option B: Paste resume text</h3>
+        <textarea id="resumeText" rows="14" placeholder="Paste your resume text here..."></textarea>
       </div>
+
+      <button id="runResumeReview" class="btn primary">
+        Generate Detailed Resume Review
+      </button>
+
+      <div id="resumeOutput" class="output"></div>
     </section>
 
-    <footer class="footer">
-      <div class="muted small">
-        Practivio • Built for engineers and engineering students • Instant reviews • No paid services
-      </div>
-    </footer>
+    <!-- LINKEDIN REVIEW -->
+    <section id="linkedinSection" class="tool-section hidden">
+      <h2>LinkedIn Profile Review</h2>
+      <p>
+        Paste your LinkedIn profile text (headline, about, experience, projects, skills). Instant detailed review.
+      </p>
+
+      <textarea id="linkedinText" rows="14" placeholder="Paste your LinkedIn profile text here..."></textarea>
+
+      <input
+        type="text"
+        id="linkedinTargetRole"
+        placeholder="Target role (optional, but helps)"
+      />
+
+      <button id="runLinkedInReview" class="btn primary">
+        Generate Detailed LinkedIn Review
+      </button>
+
+      <div id="linkedinOutput" class="output"></div>
+    </section>
+
+    <!-- MENTORSHIP -->
+    <section id="mentorship" class="mentor-section">
+      <h2>Mentorship</h2>
+      <p>
+        Want help implementing the fixes? Book a one-on-one session with Davis —
+        engineer, hiring-side reviewer, and mentor.
+      </p>
+
+      <p class="free-note">
+        Free booking — no upsells, no paid services, no pressure.
+      </p>
+
+      <a id="bookMentorship" class="btn primary" target="_blank">
+        Book a mentorship call
+      </a>
+    </section>
   </main>
 
-  <!-- PDF.js CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.7.76/pdf.min.js" integrity="sha512-8gQ7KJQ5B1H6k6bZqF8kH3tG9+7xJbR8vS7Qf1d9qYdU9V7Y7r7vDkZ5f8hBqF0j4qkqkG7d7a3kq1mYj9D6w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <footer>
+    <p>
+      Engineering Mentor • Built for engineering students and early-career engineers • Instant reviews • No paid services
+    </p>
+  </footer>
+
   <script src="app.js"></script>
 </body>
 </html>
