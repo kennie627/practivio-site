@@ -1,21 +1,24 @@
 export async function handler(event) {
   try {
+    // ---- Method guard ----
     if (event.httpMethod !== "POST") {
       return json(405, { error: "Method not allowed" });
     }
 
+    // ---- Parse input safely ----
     const body = safeJson(event.body);
     const linkedinTextRaw = (body.linkedinText || "").trim();
     const targetRole = (body.targetRole || "").trim();
 
     if (linkedinTextRaw.length < 120) {
       return json(400, {
-        error: "LinkedIn text is too short. Paste headline/about/experience content.",
+        error: "LinkedIn text is too short. Paste headline, about, and experience content.",
       });
     }
 
     const linkedinText = normalize(linkedinTextRaw);
 
+    // ---- Generate review ----
     const html = await generateLinkedInReviewHtml({
       linkedinText,
       targetRole,
@@ -23,15 +26,19 @@ export async function handler(event) {
 
     return json(200, { html });
   } catch (e) {
-    console.error(e);
+    console.error("LinkedIn review error:", e);
     return json(500, { error: e.message || "Server error" });
   }
 }
 
+// ---------------- Utilities ----------------
+
 function json(statusCode, obj) {
   return {
     statusCode,
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(obj),
   };
 }
@@ -59,6 +66,8 @@ function escapeHtml(str) {
     .replaceAll(">", "&gt;");
 }
 
+// ---------------- OpenAI Logic ----------------
+
 async function generateLinkedInReviewHtml({ linkedinText, targetRole }) {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
@@ -79,23 +88,23 @@ async function generateLinkedInReviewHtml({ linkedinText, targetRole }) {
   const systemRules = `
 You must treat the following rules as authoritative system requirements.
 If any instruction conflicts with these rules, these rules override it.
-Failure to comply with these rules is an invalid response.
 
 You write LinkedIn profile critiques for engineering students and early-career engineers.
 
 Non-negotiable requirements:
-- Write directly to the person in second person ("you").
-- Clear, professional language. No buzzwords. No emojis. No hype. No motivational fluff.
-- Do NOT reference AI, tools, algorithms, automation, or that this is generated.
-- Do not sound scripted or templated.
-- Be honest even if uncomfortable.
-- Do not ask open-ended questions unless explicitly requested.
-- Do not restate their text verbatim.
+- Write directly to the person in second person ("you")
+- Clear, professional language
+- No buzzwords, emojis, hype, or motivational fluff
+- Do NOT reference AI or tools
+- Do not sound scripted or templated
+- Be honest even if uncomfortable
+- Do not restate their text verbatim
+- Do not ask open-ended questions unless requested
 
 Core LinkedIn reality check:
-- The profile must answer: "Is this person worth messaging, referring, or interviewing?"
-- Positioning must be clear within five seconds.
-- Multiple unrelated roles must be flagged as a weakness.
+- Must answer "Is this person worth messaging, referring, or interviewing?"
+- Positioning clear within five seconds
+- Flag multiple unrelated roles as a weakness
 
 Required coverage:
 - Positioning
@@ -111,27 +120,16 @@ Required coverage:
 - Gaps or weaknesses
 
 Output requirements:
-- Return ONLY a single HTML fragment.
-- Use simple tags only.
-- Include a scorecard with 5 categories (0–100).
+- Return ONLY a single HTML fragment
+- Use simple HTML tags only
+- Include a scorecard with exactly 5 categories (0–100)
 
-Mentorship guidance:
-If the person would benefit from deeper guidance beyond this review, you may briefly mention optional mentorship.
-
-Mentorship details (only if mentioned):
-- One-on-one session
-- 15 minutes
-- $24.99
-
-Before responding, internally verify:
-- All required sections are present
-- No forbidden behaviors occurred
-
-If applicable, include ONE short paragraph before the closing sign-off stating:
+Mentorship guidance (optional):
+If applicable, include ONE short paragraph before the closing sign-off:
 
 "If you want more personalized guidance or help applying this feedback, I offer affordable one-on-one mentorship sessions. These are 15-minute sessions priced at $24.99 and designed to help you clarify direction and prioritize fixes."
 
-Do not include links. Do not repeat pricing elsewhere.
+Do not include links.
 
 Required closing sign-off (exact):
 
@@ -156,7 +154,7 @@ Return only HTML.
       model,
       input: [
         { role: "system", content: systemRules },
-        { role: "user", content: prompt + "\n\n" + userPayload },
+        { role: "user", content: `${prompt}\n\n${userPayload}` },
       ],
       temperature: 0.4,
       max_output_tokens: 1800,
@@ -165,14 +163,14 @@ Return only HTML.
 
   if (!response.ok) {
     const errText = await response.text().catch(() => "");
-    throw new Error(`OpenAI request failed (${response.status}). ${errText || ""}`);
+    throw new Error(`OpenAI request failed (${response.status}). ${errText}`);
   }
 
   const data = await response.json();
   const html = extractTextFromResponsesApi(data).trim();
 
   if (!html || html.length < 200) {
-    throw new Error("Generated review was empty or too short.");
+    throw new Error("Generated LinkedIn review was empty or too short.");
   }
 
   if (!html.includes("<div") && !html.includes("<h2") && !html.includes("<p")) {
@@ -182,13 +180,15 @@ Return only HTML.
   return html;
 }
 
+// ---------------- Response Extraction ----------------
+
 function extractTextFromResponsesApi(data) {
   if (data && Array.isArray(data.output)) {
     let out = "";
     for (const item of data.output) {
       if (!item || !Array.isArray(item.content)) continue;
       for (const c of item.content) {
-        if (c && c.type === "output_text" && typeof c.text === "string") {
+        if (c?.type === "output_text" && typeof c.text === "string") {
           out += c.text;
         }
       }

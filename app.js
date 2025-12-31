@@ -3,10 +3,12 @@
 // - Reliable PDF extraction (resume + LinkedIn) via PDF.js worker
 // - Start buttons scroll to sections
 // - Calls Netlify Functions that now use OpenAI (gpt-4.1-nano)
-//
-// NOTE: Paste your Google appointment URL below.
 
 const GOOGLE_BOOKING_LINK = ""; // e.g. "https://calendar.google.com/calendar/u/0/appointments/schedules/XXXX"
+
+// ---- Netlify function endpoints (single source of truth) ----
+const RESUME_REVIEW_ENDPOINT = "/.netlify/functions/reviewResume";
+const LINKEDIN_REVIEW_ENDPOINT = "/.netlify/functions/reviewLinkedIn";
 
 document.addEventListener("DOMContentLoaded", () => {
   // Top start buttons
@@ -83,6 +85,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (!res.ok) {
+      // Clearer error for routing issues
+      if (res.status === 404) {
+        throw new Error(
+          "Review service not found. This usually means the Netlify function name does not match the frontend endpoint."
+        );
+      }
       throw new Error(data?.error || `Request failed (${res.status})`);
     }
     return data;
@@ -92,10 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (startResumeBtn) startResumeBtn.addEventListener("click", () => showSection(resumeSection));
   if (startLinkedInBtn) startLinkedInBtn.addEventListener("click", () => showSection(linkedinSection));
 
-  // --- PDF.js worker setup (required for reliable extraction) ---
-  // Make sure index.html includes PDF.js:
-  // <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  // (worker is set here)
+  // --- PDF.js worker setup ---
   if (window.pdfjsLib && window.pdfjsLib.GlobalWorkerOptions) {
     window.pdfjsLib.GlobalWorkerOptions.workerSrc =
       "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
@@ -109,19 +114,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const buffer = await file.arrayBuffer();
     const loadingTask = window.pdfjsLib.getDocument({ data: buffer });
 
-    // In some environments, PDF.js will throw cryptic errors; catch and rethrow cleanly.
     let pdf;
     try {
       pdf = await loadingTask.promise;
-    } catch (e) {
+    } catch {
       throw new Error("PDF could not be read. If this is a scanned image PDF, use paste text instead.");
     }
 
     let fullText = "";
     for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
       const page = await pdf.getPage(pageNum);
-
-      // PDF.js text order can be weird; joining with spaces is usually best.
       const content = await page.getTextContent({
         includeMarkedContent: false,
         disableCombineTextItems: false,
@@ -145,88 +147,6 @@ document.addEventListener("DOMContentLoaded", () => {
       .trim();
   }
 
-  // --- Resume PDF extraction button ---
-  if (extractResumePdfBtn) {
-    extractResumePdfBtn.addEventListener("click", async () => {
-      try {
-        setStatus(resumePdfStatus, "");
-
-        if (!resumePdf || !resumePdf.files || !resumePdf.files[0]) {
-          setStatus(resumePdfStatus, "Choose a resume PDF first.");
-          return;
-        }
-        if (!window.pdfjsLib) {
-          setStatus(resumePdfStatus, "PDF extraction library failed to load. Hard refresh (Cmd+Shift+R) and try again.");
-          return;
-        }
-
-        const file = resumePdf.files[0];
-        if (!isPdfFile(file)) {
-          setStatus(resumePdfStatus, "That file does not look like a PDF. Please upload a .pdf file.");
-          return;
-        }
-
-        setStatus(resumePdfStatus, "Extracting resume text…");
-        const text = await extractPdfText(file);
-
-        if (!text || text.length < 120) {
-          setStatus(resumePdfStatus, "Extracted text looks empty or messy. Use paste text instead.");
-          return;
-        }
-
-        if (resumeText) resumeText.value = text;
-        setStatus(resumePdfStatus, "Extracted. Now click Generate Detailed Resume Review.");
-      } catch (e) {
-        console.error(e);
-        setStatus(
-          resumePdfStatus,
-          "Resume PDF extraction failed. If this PDF is scanned (image-only), use paste text instead."
-        );
-      }
-    });
-  }
-
-  // --- LinkedIn PDF extraction button ---
-  if (extractLinkedinPdfBtn) {
-    extractLinkedinPdfBtn.addEventListener("click", async () => {
-      try {
-        setStatus(linkedinPdfStatus, "");
-
-        if (!linkedinPdf || !linkedinPdf.files || !linkedinPdf.files[0]) {
-          setStatus(linkedinPdfStatus, "Choose a LinkedIn PDF first.");
-          return;
-        }
-        if (!window.pdfjsLib) {
-          setStatus(linkedinPdfStatus, "PDF extraction library failed to load. Hard refresh (Cmd+Shift+R) and try again.");
-          return;
-        }
-
-        const file = linkedinPdf.files[0];
-        if (!isPdfFile(file)) {
-          setStatus(linkedinPdfStatus, "That file does not look like a PDF. Please upload a .pdf file.");
-          return;
-        }
-
-        setStatus(linkedinPdfStatus, "Extracting LinkedIn text…");
-        const text = await extractPdfText(file);
-
-        if (!text || text.length < 120) {
-          setStatus(linkedinPdfStatus, "Extracted text looks empty or messy. Use paste text instead.");
-          return;
-        }
-
-        if (linkedinText) linkedinText.value = text;
-        setStatus(linkedinPdfStatus, "Extracted. Now click Generate Detailed LinkedIn Review.");
-      } catch (e) {
-        console.error(e);
-        setStatus(
-          linkedinPdfStatus,
-          "LinkedIn PDF extraction failed. If this PDF is scanned (image-only), use paste text instead."
-        );
-      }
-    });
-  }
-
   // --- Resume review call ---
   if (runResumeReviewBtn) {
     runResumeReviewBtn.addEventListener("click", async () => {
@@ -235,21 +155,23 @@ document.addEventListener("DOMContentLoaded", () => {
         const targetRole = normalize(resumeTargetRole?.value || "");
 
         if (text.length < 120) {
-          if (resumeOutput) resumeOutput.innerHTML = `<div class="notice">Paste more resume text (at least a few sections) then try again.</div>`;
+          resumeOutput.innerHTML =
+            `<div class="notice">Paste more resume text (at least a few sections) then try again.</div>`;
           return;
         }
 
-        if (resumeOutput) resumeOutput.innerHTML = `<div class="notice">Generating your resume review…</div>`;
+        resumeOutput.innerHTML = `<div class="notice">Generating your resume review…</div>`;
 
-        const data = await postJson("/.netlify/functions/reviewResume", {
+        const data = await postJson(RESUME_REVIEW_ENDPOINT, {
           resumeText: text,
           targetRole,
         });
 
-        if (resumeOutput) resumeOutput.innerHTML = data.html || `<div class="notice">No output returned.</div>`;
+        resumeOutput.innerHTML = data.html || `<div class="notice">No output returned.</div>`;
       } catch (e) {
         console.error(e);
-        if (resumeOutput) resumeOutput.innerHTML = `<div class="notice">Resume review failed: ${String(e.message || e)}</div>`;
+        resumeOutput.innerHTML =
+          `<div class="notice">Resume review failed: ${String(e.message || e)}</div>`;
       }
     });
   }
@@ -262,23 +184,23 @@ document.addEventListener("DOMContentLoaded", () => {
         const targetRole = normalize(linkedinTargetRole?.value || "");
 
         if (text.length < 120) {
-          if (linkedinOutput) {
-            linkedinOutput.innerHTML = `<div class="notice">Paste more LinkedIn profile text (headline/about/experience) then try again.</div>`;
-          }
+          linkedinOutput.innerHTML =
+            `<div class="notice">Paste more LinkedIn profile text (headline/about/experience) then try again.</div>`;
           return;
         }
 
-        if (linkedinOutput) linkedinOutput.innerHTML = `<div class="notice">Generating your LinkedIn review…</div>`;
+        linkedinOutput.innerHTML = `<div class="notice">Generating your LinkedIn review…</div>`;
 
-        const data = await postJson("/.netlify/functions/reviewLinkedIn", {
+        const data = await postJson(LINKEDIN_REVIEW_ENDPOINT, {
           linkedinText: text,
           targetRole,
         });
 
-        if (linkedinOutput) linkedinOutput.innerHTML = data.html || `<div class="notice">No output returned.</div>`;
+        linkedinOutput.innerHTML = data.html || `<div class="notice">No output returned.</div>`;
       } catch (e) {
         console.error(e);
-        if (linkedinOutput) linkedinOutput.innerHTML = `<div class="notice">LinkedIn review failed: ${String(e.message || e)}</div>`;
+        linkedinOutput.innerHTML =
+          `<div class="notice">LinkedIn review failed: ${String(e.message || e)}</div>`;
       }
     });
   }
