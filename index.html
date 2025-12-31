@@ -8,6 +8,7 @@
 
   <link rel="stylesheet" href="styles.css" />
 
+  <!-- PDF.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 
@@ -42,12 +43,12 @@
           Helping engineers and engineering students<br />
           To access free reviews, complete the steps below
         </p>
-
       </div>
     </header>
 
     <main class="main">
 
+      <!-- INTRO / FOLLOW -->
       <section class="card intro">
         <h2>Before You Start (Required)</h2>
         <p class="muted">
@@ -69,6 +70,7 @@
         </p>
       </section>
 
+      <!-- START -->
       <section class="card intro">
         <h2>Free Resume Reviews + LinkedIn Profile Reviews</h2>
         <p class="muted">
@@ -90,6 +92,7 @@
         </p>
       </section>
 
+      <!-- RESUME SECTION -->
       <section id="resumeSection" class="card tool-section hidden">
         <div class="card-head">
           <h2>Resume Review</h2>
@@ -118,7 +121,12 @@
           </div>
         </div>
 
-        <input type="text" id="resumeTargetRole" class="input" placeholder="Target role (optional, but helps)" />
+        <input
+          type="text"
+          id="resumeTargetRole"
+          class="input"
+          placeholder="Target role (optional, but helps)"
+        />
 
         <button id="runResumeReview" class="btn primary wide" type="button">
           Generate Detailed Resume Review
@@ -127,6 +135,7 @@
         <div id="resumeOutput" class="output"></div>
       </section>
 
+      <!-- LINKEDIN SECTION -->
       <section id="linkedinSection" class="card tool-section hidden">
         <div class="card-head">
           <h2>LinkedIn Profile Review</h2>
@@ -139,7 +148,6 @@
 
         <div class="notice">
           <strong>How to download your LinkedIn profile as a PDF (Desktop only):</strong><br /><br />
-          LinkedIn does not allow PDF downloads on mobile.<br /><br />
           Desktop: Profile → Resources → Save to PDF
         </div>
 
@@ -154,22 +162,35 @@
           </div>
 
           <div class="panel">
-            <h3>Option B: Paste LinkedIn sections (Mobile-friendly)</h3>
+            <h3>Option B: Paste LinkedIn profile text</h3>
+            <textarea
+              id="linkedinText"
+              rows="18"
+              placeholder="Paste your LinkedIn profile text here.
 
-            <textarea id="linkedinHeadline" rows="2" placeholder="Headline"></textarea>
-            <textarea id="linkedinAbout" rows="6" placeholder="About section"></textarea>
-            <textarea id="linkedinExperience" rows="8" placeholder="Experience section"></textarea>
-            <textarea id="linkedinEducation" rows="4" placeholder="Education"></textarea>
-            <textarea id="linkedinCerts" rows="4" placeholder="Licenses & Certifications"></textarea>
-            <textarea id="linkedinSkills" rows="4" placeholder="Skills (optional)"></textarea>
+Include:
+• Headline
+• About section
+• Experience
+• Education
+• Certifications
+• Skills
+
+Missing sections are okay."
+            ></textarea>
 
             <p class="small muted" style="margin-top:8px;">
-              Paste what you have. Missing sections are okay.
+              Tip: Copy sections directly from LinkedIn (mobile or desktop) and paste them together here.
             </p>
           </div>
         </div>
 
-        <input type="text" id="linkedinTargetRole" class="input" placeholder="Target role (optional, but helps)" />
+        <input
+          type="text"
+          id="linkedinTargetRole"
+          class="input"
+          placeholder="Target role (optional, but helps)"
+        />
 
         <button id="runLinkedInReview" class="btn primary wide" type="button">
           Generate Detailed LinkedIn Review
@@ -178,6 +199,7 @@
         <div id="linkedinOutput" class="output"></div>
       </section>
 
+      <!-- MENTORSHIP -->
       <section id="mentorship" class="card mentor-section">
         <div class="card-head">
           <h2>Mentorship</h2>
@@ -191,7 +213,12 @@
           Tactical guidance. No upsells. No pressure.
         </div>
 
-        <a class="btn primary wide" href="https://buy.stripe.com/7sY8wR3Vv6At0vjc5q6g807" target="_blank" rel="noreferrer">
+        <a
+          class="btn primary wide"
+          href="https://buy.stripe.com/7sY8wR3Vv6At0vjc5q6g807"
+          target="_blank"
+          rel="noreferrer"
+        >
           Book 15-Minute Mentorship
         </a>
       </section>
