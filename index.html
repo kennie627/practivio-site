@@ -17,11 +17,7 @@
     <header class="profile-header">
       <div class="profile-card">
         <div class="avatar-wrap">
-          <img
-            class="avatar-img"
-            src="assets/profile.jpg"
-            alt="Engineering Mentor profile photo"
-          />
+          <img class="avatar-img" src="assets/profile.jpg" alt="Engineering Mentor profile photo" />
           <span class="plus-badge" aria-hidden="true">+</span>
         </div>
 
@@ -31,24 +27,15 @@
         </div>
 
         <div class="stats">
-          <div class="stat">
-            <div class="num">Free</div>
-            <div class="lbl">Reviews</div>
-          </div>
-          <div class="stat">
-            <div class="num">Fast</div>
-            <div class="lbl">Fixes</div>
-          </div>
-          <div class="stat">
-            <div class="num">Real</div>
-            <div class="lbl">Hiring signal</div>
-          </div>
+          <div class="stat"><div class="num">Free</div><div class="lbl">Reviews</div></div>
+          <div class="stat"><div class="num">Fast</div><div class="lbl">Fixes</div></div>
+          <div class="stat"><div class="num">Real</div><div class="lbl">Hiring signal</div></div>
         </div>
 
         <p class="bio">
           Former NASA and Rocket Engineer<br />
           Helping engineers and engineering students<br />
-          Click below to get started
+          To access free reviews, complete the steps below
         </p>
 
         <div class="pill-row">
@@ -66,6 +53,29 @@
     </header>
 
     <main class="main">
+
+      <!-- STEP 1 -->
+      <section class="card intro">
+        <h2>Before You Start (Required)</h2>
+        <p class="muted">
+          These reviews are free. Following helps keep them that way and lets me continue offering real, honest feedback.
+        </p>
+
+        <div class="start-buttons">
+          <a class="btn" href="https://www.tiktok.com/@engineeringmentor" target="_blank" rel="noreferrer">
+            Follow on TikTok
+          </a>
+          <a class="btn" href="https://www.linkedin.com/in/davis-booth-81537391" target="_blank" rel="noreferrer">
+            Follow on LinkedIn
+          </a>
+        </div>
+
+        <p class="small muted" style="margin-top:10px;">
+          Once you’ve followed, start your review below.
+        </p>
+      </section>
+
+      <!-- STEP 2 -->
       <section class="card intro">
         <h2>Free Resume Reviews + LinkedIn Profile Reviews</h2>
         <p class="muted">
@@ -74,9 +84,17 @@
         </p>
 
         <div class="start-buttons">
-          <button id="startResume" class="btn primary" type="button">Start Resume Review</button>
-          <button id="startLinkedIn" class="btn" type="button">Start LinkedIn Review</button>
+          <button id="startResume" class="btn primary" type="button">
+            Start Resume Review
+          </button>
+          <button id="startLinkedIn" class="btn" type="button">
+            Start LinkedIn Review
+          </button>
         </div>
+
+        <p class="small muted" style="margin-top:10px;">
+          Tip: Uploading both your resume and LinkedIn profile produces a stronger, more accurate review.
+        </p>
 
         <p class="privacy">
           Privacy: your PDF is processed in your browser and only extracted text is sent for review. No files stored.
@@ -116,7 +134,7 @@
           type="text"
           id="resumeTargetRole"
           class="input"
-          placeholder="Target role (optional, but helps) e.g., Entry-level Mechanical Engineer, Test Engineer, Aerospace Systems Engineer"
+          placeholder="Target role (optional, but helps)"
         />
 
         <button id="runResumeReview" class="btn primary wide" type="button">
@@ -140,9 +158,6 @@
         <div class="notice">
           <strong>How to download your LinkedIn PDF (Desktop):</strong><br />
           Open your profile → click <strong>More</strong> → <strong>Save to PDF</strong> → then upload the PDF here.
-          <div class="small muted" style="margin-top:8px;">
-            If you don’t see “Save to PDF” on mobile, use a computer or LinkedIn desktop site.
-          </div>
         </div>
 
         <div class="split">
@@ -163,7 +178,7 @@
           type="text"
           id="linkedinTargetRole"
           class="input"
-          placeholder="Target role (optional, but helps) e.g., Electrical Engineer, Manufacturing Engineer, Systems Engineer"
+          placeholder="Target role (optional, but helps)"
         />
 
         <button id="runLinkedInReview" class="btn primary wide" type="button">
@@ -177,24 +192,30 @@
       <section id="mentorship" class="card mentor-section">
         <div class="card-head">
           <h2>Mentorship</h2>
-          <span class="badge alt">Free</span>
+          <span class="badge alt">$24.99</span>
         </div>
 
         <p class="muted">
-          Want help implementing the fixes? Book a one-on-one session with Davis.
+          Want help applying this feedback or deciding next steps?
         </p>
 
         <div class="notice">
-          Free booking — no upsells, no paid services, no pressure.
+          15-minute focused, one-on-one session.<br />
+          Tactical guidance. No upsells. No pressure.
         </div>
 
-        <a id="bookMentorship" class="btn primary wide" target="_blank" rel="noreferrer">
-          Book a mentorship call
+        <a
+          class="btn primary wide"
+          href="https://buy.stripe.com/7sY8wR3Vv6At0vjc5q6g807"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Book 15-Minute Mentorship
         </a>
       </section>
 
       <footer class="footer">
-        Engineering Mentor • Built for engineering students and early-career engineers • Instant reviews • No paid services
+        Engineering Mentor • Built for engineering students and early-career engineers • Instant reviews
       </footer>
     </main>
   </div>
