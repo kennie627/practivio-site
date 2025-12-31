@@ -8,18 +8,21 @@
 
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- PDF.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 
 <body>
   <div class="page">
 
-    <!-- HEADER -->
     <header class="profile-header">
       <div class="profile-card">
         <div class="avatar-wrap">
-          <img class="avatar-img" src="assets/profile.jpg" alt="Engineering Mentor profile photo" />
+          <img
+            class="avatar-img"
+            src="assets/profile.jpg"
+            alt="Engineering Mentor profile photo"
+            style="width:96px;height:96px;"
+          />
           <span class="plus-badge" aria-hidden="true">+</span>
         </div>
 
@@ -40,23 +43,11 @@
           To access free reviews, complete the steps below
         </p>
 
-        <div class="pill-row">
-          <a class="pill" href="https://www.linkedin.com/in/davis-booth-81537391" target="_blank" rel="noreferrer">
-            Follow on LinkedIn
-          </a>
-          <a class="pill" href="https://www.tiktok.com/@engineeringmentor" target="_blank" rel="noreferrer">
-            Follow on TikTok
-          </a>
-          <a class="pill primary" href="#mentorship">
-            Book mentorship
-          </a>
-        </div>
       </div>
     </header>
 
     <main class="main">
 
-      <!-- STEP 1 -->
       <section class="card intro">
         <h2>Before You Start (Required)</h2>
         <p class="muted">
@@ -78,7 +69,6 @@
         </p>
       </section>
 
-      <!-- STEP 2 -->
       <section class="card intro">
         <h2>Free Resume Reviews + LinkedIn Profile Reviews</h2>
         <p class="muted">
@@ -87,12 +77,8 @@
         </p>
 
         <div class="start-buttons">
-          <button id="startResume" class="btn primary" type="button">
-            Start Resume Review
-          </button>
-          <button id="startLinkedIn" class="btn" type="button">
-            Start LinkedIn Review
-          </button>
+          <button id="startResume" class="btn primary" type="button">Start Resume Review</button>
+          <button id="startLinkedIn" class="btn" type="button">Start LinkedIn Review</button>
         </div>
 
         <p class="small muted" style="margin-top:10px;">
@@ -104,7 +90,6 @@
         </p>
       </section>
 
-      <!-- RESUME REVIEW -->
       <section id="resumeSection" class="card tool-section hidden">
         <div class="card-head">
           <h2>Resume Review</h2>
@@ -123,9 +108,7 @@
             </p>
 
             <input type="file" id="resumePdf" accept="application/pdf" />
-            <button id="extractPdf" class="btn" type="button">
-              Extract Text From PDF
-            </button>
+            <button id="extractPdf" class="btn" type="button">Extract Text From PDF</button>
             <p id="pdfStatus" class="status"></p>
           </div>
 
@@ -135,12 +118,7 @@
           </div>
         </div>
 
-        <input
-          type="text"
-          id="resumeTargetRole"
-          class="input"
-          placeholder="Target role (optional, but helps)"
-        />
+        <input type="text" id="resumeTargetRole" class="input" placeholder="Target role (optional, but helps)" />
 
         <button id="runResumeReview" class="btn primary wide" type="button">
           Generate Detailed Resume Review
@@ -149,7 +127,6 @@
         <div id="resumeOutput" class="output"></div>
       </section>
 
-      <!-- LINKEDIN REVIEW -->
       <section id="linkedinSection" class="card tool-section hidden">
         <div class="card-head">
           <h2>LinkedIn Profile Review</h2>
@@ -163,14 +140,7 @@
         <div class="notice">
           <strong>How to download your LinkedIn profile as a PDF (Desktop only):</strong><br /><br />
           LinkedIn does not allow PDF downloads on mobile.<br /><br />
-          <strong>Desktop steps:</strong><br />
-          1. Open your LinkedIn profile<br />
-          2. Click <strong>Profile</strong><br />
-          3. Click <strong>Resources</strong><br />
-          4. Select <strong>Save to PDF</strong><br />
-          5. Upload the PDF here
-          <br /><br />
-          <strong>No desktop access?</strong> Use the copy-paste option below.
+          Desktop: Profile → Resources → Save to PDF
         </div>
 
         <div class="split">
@@ -184,11 +154,13 @@
           </div>
 
           <div class="panel">
-            <h3>Option B: Paste LinkedIn profile sections (Mobile-friendly)</h3>
+            <h3>Option B: Paste LinkedIn sections (Mobile-friendly)</h3>
 
             <textarea id="linkedinHeadline" rows="2" placeholder="Headline"></textarea>
             <textarea id="linkedinAbout" rows="6" placeholder="About section"></textarea>
             <textarea id="linkedinExperience" rows="8" placeholder="Experience section"></textarea>
+            <textarea id="linkedinEducation" rows="4" placeholder="Education"></textarea>
+            <textarea id="linkedinCerts" rows="4" placeholder="Licenses & Certifications"></textarea>
             <textarea id="linkedinSkills" rows="4" placeholder="Skills (optional)"></textarea>
 
             <p class="small muted" style="margin-top:8px;">
@@ -197,12 +169,7 @@
           </div>
         </div>
 
-        <input
-          type="text"
-          id="linkedinTargetRole"
-          class="input"
-          placeholder="Target role (optional, but helps)"
-        />
+        <input type="text" id="linkedinTargetRole" class="input" placeholder="Target role (optional, but helps)" />
 
         <button id="runLinkedInReview" class="btn primary wide" type="button">
           Generate Detailed LinkedIn Review
@@ -211,28 +178,20 @@
         <div id="linkedinOutput" class="output"></div>
       </section>
 
-      <!-- MENTORSHIP -->
       <section id="mentorship" class="card mentor-section">
         <div class="card-head">
           <h2>Mentorship</h2>
           <span class="badge alt">$24.99</span>
         </div>
 
-        <p class="muted">
-          Want help applying this feedback or deciding next steps?
-        </p>
+        <p class="muted">Want help applying this feedback or deciding next steps?</p>
 
         <div class="notice">
           15-minute focused, one-on-one session.<br />
           Tactical guidance. No upsells. No pressure.
         </div>
 
-        <a
-          class="btn primary wide"
-          href="https://buy.stripe.com/7sY8wR3Vv6At0vjc5q6g807"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a class="btn primary wide" href="https://buy.stripe.com/7sY8wR3Vv6At0vjc5q6g807" target="_blank" rel="noreferrer">
           Book 15-Minute Mentorship
         </a>
       </section>
