@@ -14,6 +14,8 @@
 
 <body>
   <div class="page">
+
+    <!-- HEADER -->
     <header class="profile-header">
       <div class="profile-card">
         <div class="avatar-wrap">
@@ -58,7 +60,8 @@
       <section class="card intro">
         <h2>Before You Start (Required)</h2>
         <p class="muted">
-          These reviews are free. Following helps keep them that way and lets me continue offering real, honest feedback.
+          These reviews are free. Following helps keep them that way and lets me continue offering real,
+          honest feedback from a hiring perspective.
         </p>
 
         <div class="start-buttons">
@@ -97,7 +100,7 @@
         </p>
 
         <p class="privacy">
-          Privacy: your PDF is processed in your browser and only extracted text is sent for review. No files stored.
+          Privacy: PDFs are processed in your browser. Only extracted text is sent for review. No files stored.
         </p>
       </section>
 
@@ -120,7 +123,9 @@
             </p>
 
             <input type="file" id="resumePdf" accept="application/pdf" />
-            <button id="extractPdf" class="btn" type="button">Extract Text From PDF</button>
+            <button id="extractPdf" class="btn" type="button">
+              Extract Text From PDF
+            </button>
             <p id="pdfStatus" class="status"></p>
           </div>
 
@@ -152,25 +157,43 @@
         </div>
 
         <p class="muted">
-          Best path: export your LinkedIn profile as a PDF, upload it here, then generate your review.
+          Best path: export your LinkedIn profile as a PDF on desktop, upload it here, then generate your review.
         </p>
 
         <div class="notice">
-          <strong>How to download your LinkedIn PDF (Desktop):</strong><br />
-          Open your profile → click <strong>More</strong> → <strong>Save to PDF</strong> → then upload the PDF here.
+          <strong>How to download your LinkedIn profile as a PDF (Desktop only):</strong><br /><br />
+          LinkedIn does not allow PDF downloads on mobile.<br /><br />
+          <strong>Desktop steps:</strong><br />
+          1. Open your LinkedIn profile<br />
+          2. Click <strong>Profile</strong><br />
+          3. Click <strong>Resources</strong><br />
+          4. Select <strong>Save to PDF</strong><br />
+          5. Upload the PDF here
+          <br /><br />
+          <strong>No desktop access?</strong> Use the copy-paste option below.
         </div>
 
         <div class="split">
           <div class="panel">
             <h3>Option A: Upload LinkedIn PDF</h3>
             <input type="file" id="linkedinPdf" accept="application/pdf" />
-            <button id="extractLinkedinPdf" class="btn" type="button">Extract Text From LinkedIn PDF</button>
+            <button id="extractLinkedinPdf" class="btn" type="button">
+              Extract Text From LinkedIn PDF
+            </button>
             <p id="linkedinPdfStatus" class="status"></p>
           </div>
 
           <div class="panel">
-            <h3>Option B: Paste LinkedIn profile text</h3>
-            <textarea id="linkedinText" rows="12" placeholder="Paste your LinkedIn profile text here..."></textarea>
+            <h3>Option B: Paste LinkedIn profile sections (Mobile-friendly)</h3>
+
+            <textarea id="linkedinHeadline" rows="2" placeholder="Headline"></textarea>
+            <textarea id="linkedinAbout" rows="6" placeholder="About section"></textarea>
+            <textarea id="linkedinExperience" rows="8" placeholder="Experience section"></textarea>
+            <textarea id="linkedinSkills" rows="4" placeholder="Skills (optional)"></textarea>
+
+            <p class="small muted" style="margin-top:8px;">
+              Paste what you have. Missing sections are okay.
+            </p>
           </div>
         </div>
 
