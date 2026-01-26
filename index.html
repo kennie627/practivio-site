@@ -2,220 +2,147 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Engineering Mentor — Private Mentorship for Engineers</title>
+  <title>Engineering Mentor — 1:1 Mentorship</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Private engineering mentorship from a former NASA and rocket engineer. Real hiring insight. Structured career guidance." />
-
-  <style>
-    :root{
-      --bg:#0b0b0f;
-      --card:#14141a;
-      --text:#f4f4f5;
-      --muted:#9ca3af;
-      --line:#23232d;
-      --accent:#3b82f6;
-      --radius:18px;
-      --shadow:0 20px 40px rgba(0,0,0,.4);
-    }
-
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-      background:var(--bg);
-      color:var(--text);
-      line-height:1.4;
-    }
-
-    .page{
-      max-width:980px;
-      margin:0 auto;
-      padding:32px 16px 64px;
-    }
-
-    header{
-      text-align:center;
-      margin-bottom:40px;
-    }
-
-    .avatar{
-      width:96px;
-      height:96px;
-      border-radius:50%;
-      object-fit:cover;
-      margin-bottom:14px;
-      box-shadow:var(--shadow);
-    }
-
-    h1{
-      margin:0;
-      font-size:30px;
-      letter-spacing:-0.5px;
-    }
-
-    .handle{
-      color:var(--muted);
-      margin-top:4px;
-    }
-
-    .bio{
-      margin-top:16px;
-      color:var(--muted);
-      max-width:640px;
-      margin-left:auto;
-      margin-right:auto;
-    }
-
-    .stats{
-      display:flex;
-      justify-content:center;
-      gap:28px;
-      margin-top:22px;
-    }
-
-    .stat strong{
-      display:block;
-      font-size:16px;
-    }
-
-    .stat span{
-      font-size:12px;
-      color:var(--muted);
-    }
-
-    section{
-      background:var(--card);
-      border-radius:var(--radius);
-      padding:28px;
-      margin-top:28px;
-      box-shadow:var(--shadow);
-      border:1px solid var(--line);
-    }
-
-    h2{
-      margin-top:0;
-      font-size:22px;
-    }
-
-    p{
-      color:var(--muted);
-    }
-
-    .offer{
-      margin-top:20px;
-      padding:18px;
-      border-radius:14px;
-      border:1px solid var(--line);
-      background:#0f0f15;
-    }
-
-    .offer strong{
-      color:var(--text);
-    }
-
-    .btn{
-      display:block;
-      margin-top:14px;
-      padding:14px;
-      border-radius:12px;
-      background:var(--accent);
-      color:#fff;
-      text-align:center;
-      text-decoration:none;
-      font-weight:600;
-    }
-
-    .btn.secondary{
-      background:#1f2937;
-    }
-
-    footer{
-      margin-top:48px;
-      text-align:center;
-      color:var(--muted);
-      font-size:13px;
-    }
-
-    @media(max-width:600px){
-      .stats{flex-direction:column; gap:12px;}
-    }
-  </style>
+  <meta name="description" content="High-signal engineering mentorship from a former NASA and rocket engineer." />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-  <div class="page">
 
-    <header>
-      <img src="assets/profile.jpg" alt="Engineering Mentor" class="avatar" />
-      <h1>Engineering Mentor</h1>
-      <div class="handle">@engineeringmentor</div>
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand">Engineering Mentor</div>
+    <div class="nav-links">
+      <a href="#mentorship">Mentorship</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#apply">Apply</a>
+    </div>
+  </div>
+</nav>
 
-      <div class="bio">
-        Former NASA and Rocket Engineer.<br>
-        Helping engineers and engineering students get hired, promoted, and unstuck.<br>
-        Structured mentorship. Real hiring perspective. Limited availability.
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <h1>Real Engineering Mentorship</h1>
+      <p class="hero-sub">
+        Former NASA and Rocket Engineer.  
+        No fluff. No influencer advice.  
+        Just real hiring signals and career direction.
+      </p>
+
+      <div class="hero-cta">
+        <a href="#pricing" class="btn primary">View Mentorship Options</a>
+        <a href="#apply" class="btn">Long-Term Mentorship</a>
       </div>
+    </div>
 
-      <div class="stats">
-        <div class="stat">
-          <strong>NASA</strong>
-          <span>Hiring Signal</span>
-        </div>
-        <div class="stat">
-          <strong>20+ Years</strong>
-          <span>Industry Experience</span>
-        </div>
-        <div class="stat">
-          <strong>Private</strong>
-          <span>Mentorship Only</span>
-        </div>
-      </div>
-    </header>
+    <div class="hero-photo">
+      <img src="assets/profile.jpg" alt="Engineering Mentor" />
+    </div>
+  </div>
+</section>
 
-    <section>
-      <h2>Mentorship Options</h2>
-      <p>Choose the level of support that matches how serious you are about your engineering career.</p>
+<!-- AUTHORITY -->
+<div class="authority">
+  Trusted by engineering students and early-career engineers navigating real hiring pipelines
+</div>
 
-      <div class="offer">
-        <strong>1-on-1 Private Mentorship — $299</strong>
-        <p>
-          60-minute focused session.<br>
-          Resume, LinkedIn, job strategy, career decisions, or offer negotiation.<br>
-          Direct feedback from a former NASA & rocket engineer.
-        </p>
-        <a class="btn" href="https://buy.stripe.com/dRmbJ3bnXbUN6THc5q6g80d" target="_blank">
-          Book 1-on-1 Session
-        </a>
-      </div>
+<!-- PRICING -->
+<section id="pricing" class="section dark">
+  <h2>Mentorship Options</h2>
 
-      <div class="offer">
-        <strong>Email Mentorship Access — $24.99 / month</strong>
-        <p>
-          Ongoing guidance via email.<br>
-          Ask questions, sanity-check decisions, and get unstuck without scheduling calls.
-        </p>
-        <a class="btn secondary" href="https://buy.stripe.com/8x2bJ33Vv1g90vjc5q6g80e" target="_blank">
-          Join Email Mentorship
-        </a>
-      </div>
+  <div class="grid-3">
 
-      <div class="offer">
-        <strong>6-Month Private Mentorship — $5,000</strong>
-        <p>
-          High-touch mentorship for serious engineers only.<br>
-          Career positioning, accountability, and direct access.<br>
-          Application required.
-        </p>
-        <a class="btn secondary" href="mailto:boothcommunications@gmail.com?subject=6-Month Mentorship Application">
-          Apply for 6-Month Mentorship
-        </a>
-      </div>
-    </section>
+    <!-- $299 SESSION -->
+    <div class="card featured">
+      <h3>1-on-1 Mentorship Session</h3>
+      <div class="price">$299</div>
+      <ul class="list">
+        <li>Focused career & hiring guidance</li>
+        <li>Resume + LinkedIn positioning</li>
+        <li>Next-step strategy clarity</li>
+        <li>Two nightly sessions available (Mon–Fri)</li>
+      </ul>
+      <a
+        href="https://buy.stripe.com/dRmbJ3bnXbUN6THc5q6g80d"
+        target="_blank"
+        class="btn primary wide"
+      >
+        Book 1-on-1 Session
+      </a>
+    </div>
 
-    <footer>
-      Engineering Mentor • Private mentorship for engineers and engineering students
-    </footer>
+    <!-- $24.99 SUB -->
+    <div class="card">
+      <h3>Email Mentorship</h3>
+      <div class="price">$24.99 / month</div>
+      <ul class="list">
+        <li>Direct email access</li>
+        <li>Career & resume questions answered</li>
+        <li>Asynchronous support</li>
+        <li>No calls required</li>
+      </ul>
+      <a
+        href="https://buy.stripe.com/8x2bJ33Vv1g90vjc5q6g80e"
+        target="_blank"
+        class="btn wide"
+      >
+        Start Email Mentorship
+      </a>
+    </div>
+
+    <!-- $5K PROGRAM -->
+    <div class="card">
+      <h3>6-Month Private Mentorship</h3>
+      <div class="price">$5,000</div>
+      <ul class="list">
+        <li>Long-term career strategy</li>
+        <li>Hiring pipeline navigation</li>
+        <li>Direct mentorship access</li>
+        <li>Limited availability</li>
+      </ul>
+      <a href="#apply" class="btn wide">
+        Apply for 6-Month Mentorship
+      </a>
+    </div>
 
   </div>
+</section>
+
+<!-- WHO -->
+<section class="section">
+  <h2>Who This Is For</h2>
+  <ul class="who">
+    <li>Engineering students preparing for industry</li>
+    <li>Early-career engineers feeling stuck or underpaid</li>
+    <li>Technicians transitioning into engineering roles</li>
+    <li>Engineers who want real hiring insight</li>
+  </ul>
+</section>
+
+<!-- APPLY -->
+<section id="apply" class="apply">
+  <h2>Apply for 6-Month Mentorship</h2>
+  <p>
+    This is a high-touch, limited-slot mentorship.  
+    If you’re serious about long-term career positioning, apply via email.
+  </p>
+
+  <a
+    href="mailto:boothcommunications@gmail.com?subject=6%20Month%20Engineering%20Mentorship%20Application"
+    class="btn primary"
+  >
+    Apply via Email
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  Engineering Mentor • Built for engineers who want real career leverage
+</footer>
+
 </body>
 </html>
