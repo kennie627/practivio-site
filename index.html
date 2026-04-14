@@ -1,135 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>90 Day Aerospace Bootcamp | Engineering Mentor</title>
+<meta charset="UTF-8" />
+<title>90 Day Aerospace Bootcamp | Engineering Mentor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+body {
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:#0b0b0c;
+  color:white;
+}
 
-  <meta name="description" content="A high-accountability 90-day aerospace bootcamp for engineers ready to compete at the highest level. Limited to 5 engineers per cohort." />
+/* LAYOUT */
+.container {
+  max-width:1100px;
+  margin:0 auto;
+  padding:60px 20px;
+  display:flex;
+  gap:40px;
+  align-items:center;
+}
 
-  <!-- 🔥 LINKEDIN PREVIEW (IMPORTANT) -->
-  <meta property="og:title" content="90 Day Aerospace Bootcamp — Engineering Mentor" />
-  <meta property="og:description" content="Only 5 engineers per cohort. A 90-day system focused on communication, positioning, and breaking into aerospace." />
-  <meta property="og:image" content="https://engineeringmentor.netlify.app/assets/profile.jpeg" />
-  <meta property="og:url" content="https://engineeringmentor.netlify.app" />
-  <meta property="og:type" content="website" />
-</head>
+.section {
+  max-width:900px;
+  margin:0 auto;
+  padding:80px 20px;
+}
 
-  <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #0b0b0c;
-      color: white;
-    }
+.dark { background:#111113; }
 
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 80px 20px;
-      display: flex;
-      gap: 60px;
-      align-items: center;
-    }
+.text { flex:1; }
+.image { flex:1; }
 
-    .text {
-      flex: 1;
-    }
+.image img {
+  width:100%;
+  max-width:350px;
+  border-radius:12px;
+}
 
-    .image {
-      flex: 0 0 350px;
-    }
+/* TYPOGRAPHY */
+h1 { font-size:42px; margin-bottom:20px; }
+h2 { font-size:30px; margin-bottom:20px; }
+h3 { margin-top:30px; }
 
-    .image img {
-      width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    }
+p {
+  color:#ccc;
+  margin-bottom:14px;
+  font-size:17px;
+  line-height:1.6;
+}
 
-    h1 { font-size: 48px; margin-bottom: 20px; }
-    h2 { font-size: 32px; margin-bottom: 20px; }
-    h3 { font-size: 22px; margin-top: 30px; }
+.muted { color:#888; }
 
-    p {
-      color: #ccc;
-      margin-bottom: 14px;
-      font-size: 17px;
-      line-height: 1.6;
-    }
+/* BUTTONS */
+.btn {
+  display:inline-block;
+  width:260px;
+  padding:14px;
+  margin-top:10px;
+  text-align:center;
+  border-radius:8px;
+  text-decoration:none;
+  border:1px solid #333;
+  color:white;
+}
 
-    .btn {
-      display: inline-block;
-      width: 260px;
-      padding: 14px;
-      text-align: center;
-      border-radius: 8px;
-      text-decoration: none;
-      margin-top: 10px;
-      border: 1px solid #333;
-      color: white;
-    }
+.btn.primary {
+  background:white;
+  color:black;
+  border:none;
+}
 
-    .btn.primary {
-      background: white;
-      color: black;
-      border: none;
-    }
+/* MOBILE FIX */
+@media (max-width:768px){
+  .container{
+    flex-direction:column;
+    text-align:left;
+  }
 
-    .section {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 80px 20px;
-    }
+  .image img{
+    max-width:100%;
+  }
+}
 
-    .dark {
-      background: #111113;
-    }
-
-    .center {
-      text-align: center;
-      margin-top: 60px;
-    }
-
-    ul {
-      padding-left: 20px;
-      color: #ccc;
-    }
-
-    li { margin-bottom: 10px; }
-
-    .muted { color: #888; }
-
-    .footer {
-      text-align: center;
-      padding: 40px;
-      color: #666;
-      border-top: 1px solid #222;
-    }
-  </style>
+/* FOOTER */
+.footer {
+  text-align:center;
+  padding:40px;
+  color:#666;
+}
+</style>
 </head>
 
 <body>
 
 <!-- HERO -->
 <div class="container">
-
   <div class="text">
     <h1>90 Day Aerospace Bootcamp</h1>
 
     <p>
-      This is a high-accountability system for engineers who want to break into aerospace and compete at the highest level.
+      A high-accountability system for engineers who want to break into aerospace and compete at the highest level.
     </p>
 
     <p>
       Only 5 engineers are accepted each month. Enrollment closes on the 10th. The bootcamp begins on the 15th.
     </p>
 
-    <p>
-      This is not a course. This is execution under pressure.
-    </p>
-
-    <div id="countdown" style="margin-top:20px; color:#aaa;"></div>
+    <div id="countdown" style="margin-top:15px;color:#aaa;"></div>
 
     <a href="https://buy.stripe.com/8x2bJ3eA97Exguh2uQ6g80k" class="btn primary" target="_blank">
       Secure One of the 5 Spots
@@ -143,66 +123,104 @@
   </div>
 
   <div class="image">
-    <!-- 🔥 YOUR REAL IMAGE -->
     <img src="assets/profile.jpeg" alt="Davis Booth">
   </div>
+</div>
 
+<!-- PROBLEM SECTION (🔥 YOUR LINKEDIN CONTENT) -->
+<div class="section">
+  <h2>Why Most Engineers Get Overlooked</h2>
+
+  <p>Most young engineers think getting the job comes down to how much they know.</p>
+  <p>It doesn’t.</p>
+
+  <p>I’ve sat in on a lot of interviews.</p>
+
+  <p>
+    And I’ve seen something happen over and over again…
+    very capable engineers talk themselves out of the job.
+  </p>
+
+  <p>
+    Not because they lack skill. Not because they didn’t study hard enough.
+  </p>
+
+  <p>
+    Because they couldn’t communicate what they know.
+  </p>
+
+  <p>
+    They couldn’t clearly explain their experience.  
+    They couldn’t tell a compelling story.  
+    They couldn’t present themselves with confidence.
+  </p>
+
+  <p>
+    And in competitive environments like aerospace, that’s everything.
+  </p>
+
+  <p>
+    Students spend years grinding through engineering school just trying to survive.
+  </p>
+
+  <p>
+    But along the way, they miss one of the most important parts of the process:
+    how to position themselves, how to communicate their value,
+    and how to stand out in a room full of other smart engineers.
+  </p>
+
+  <p>
+    That’s at least half the battle. Probably more.
+  </p>
 </div>
 
 <!-- AUTHORITY -->
-<div class="section">
-  <h2>Why This Bootcamp Exists</h2>
+<div class="section dark">
+  <h2>Why I Built This Bootcamp</h2>
+
+  <p>My name is Davis Booth.</p>
 
   <p>
-    My name is Davis Booth. I’ve worked as a NASA contractor and supported rocket launches at United Launch Alliance.
+    I’ve worked as a NASA contractor and supported rocket launches at United Launch Alliance.
   </p>
 
   <p>
-    I’ve operated inside real engineering environments where performance and communication determine who moves forward.
+    I now lead engineering teams and sit in on hiring decisions.
   </p>
 
   <p>
-    Today, I lead engineering teams and sit in on hiring decisions. I know exactly how candidates are evaluated.
+    I know exactly how candidates are evaluated — and what causes them to get overlooked.
   </p>
 
   <p>
-    This bootcamp gives you that advantage early.
+    This bootcamp exists to give you that advantage early.
   </p>
 </div>
 
 <!-- SYSTEM -->
-<div class="section dark">
+<div class="section">
   <h2>The Bootcamp System</h2>
 
   <p>
-    This is a structured 12-week system built around execution, accountability, and pressure.
+    This is a 12-week, high-accountability system built around execution, communication, and positioning.
   </p>
 
   <p>
-    You will go through it with the same 5 engineers. That environment creates real growth.
+    You will go through it with the same 5 engineers. That environment creates pressure and real growth.
   </p>
 
-  <h3>The Standard</h3>
+  <h3>What You’ll Do</h3>
 
   <ul>
-    <li>5 AM wake-ups</li>
-    <li>Weekly book completion</li>
-    <li>Speaking videos</li>
-    <li>Daily execution tracking</li>
-    <li>Outreach to engineers</li>
+    <li>Wake up at 5 AM consistently</li>
+    <li>Complete one book every week</li>
+    <li>Record speaking videos to improve communication</li>
+    <li>Build a portfolio-level engineering project</li>
+    <li>Define your target role and companies</li>
+    <li>Master how you present yourself in interviews</li>
   </ul>
 
-  <h3>The Work</h3>
-
-  <ul>
-    <li>Full career audit</li>
-    <li>Target companies</li>
-    <li>Portfolio project</li>
-    <li>Interview mastery</li>
-    <li>Communication improvement</li>
-  </ul>
-
-  <div class="center">
+  <div style="text-align:center; margin-top:50px;">
     <h2>$4,990</h2>
 
     <p class="muted">
@@ -210,7 +228,11 @@
     </p>
 
     <p class="muted">
-      Limited to 5 engineers per cohort. If full, next month only.
+      Limited to 5 engineers per cohort. Once full, the next opportunity is next month.
+    </p>
+
+    <p class="muted">
+      This is not a necessity. This is an advantage.
     </p>
 
     <a href="https://buy.stripe.com/8x2bJ3eA97Exguh2uQ6g80k" class="btn primary" target="_blank">
