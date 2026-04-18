@@ -39,6 +39,13 @@ body {
   border-radius:12px;
 }
 
+.image video {
+  width:100%;
+  max-width:400px;
+  border-radius:12px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
 h1 { font-size:42px; margin-bottom:20px; }
 h2 { font-size:30px; margin-bottom:20px; }
 h3 { margin-top:30px; }
@@ -81,6 +88,10 @@ li { margin-bottom:10px; }
   .container{
     flex-direction:column;
   }
+
+  .image {
+    order: -1;
+  }
 }
 
 .footer {
@@ -102,15 +113,13 @@ li { margin-bottom:10px; }
       This is a high-accountability system for engineers who want to break into aerospace and compete at the highest level.
     </p>
 
-  
-
     <p>
       This program is built around real execution, not passive learning.
     </p>
 
     <div id="countdown" style="margin-top:15px;color:#aaa;"></div>
 
-    
+    <a href="https://calendly.com/davisleebooth/free_consultation" class="btn primary" target="_blank">
       Secure One of the 5 Spots
     </a>
 
@@ -122,7 +131,11 @@ li { margin-bottom:10px; }
   </div>
 
   <div class="image">
-    <img src="assets/profile.jpeg" alt="Davis Booth">
+    <video controls playsinline>
+      <source src="assets/webvid.mov" type="video/quicktime">
+      <source src="assets/webvid.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
   </div>
 </div>
 
@@ -158,8 +171,6 @@ li { margin-bottom:10px; }
   <p>
     Students spend years grinding through engineering school just trying to survive, but along the way they miss how important positioning and communication really are.
   </p>
-
-  
 </div>
 
 <!-- AUTHORITY -->
@@ -257,38 +268,22 @@ li { margin-bottom:10px; }
     That’s when you start getting offers from the companies you actually want, in roles you actually care about.
   </p>
 
+  <p class="muted">
+    Enrollment closes on the 10th of every month • Bootcamp begins on the 15th
+  </p>
 
-    <p class="muted">
-      Enrollment closes on the 10th of every month • Bootcamp begins on the 15th
-    </p>
+  <p class="muted">
+    This program is not a necessity. It is a luxury for engineers who want to get ahead and compete at a higher level.
+  </p>
 
-    <p class="muted">
-      This program is not a necessity. It is a luxury now available to engineers who want to get ahead of their peers and compete at a higher level.
-    </p>
-
-    <p class="muted">
-      It serves as a filter to ensure only serious engineers — those willing to invest both time and money — enter the cohort.
-    </p>
-
-    <p class="muted">
-      Demand is strong, and maintaining a high standard is critical. Allowing anyone to join would dilute the experience and lower the value for the cohort.
-    </p>
-
-    
-      Join This Month’s Bootcamp
-    </a>
-
-    <br>
-
-    <a href="https://calendly.com/davisleebooth/free_consultation" class="btn" target="_blank">
-      Schedule A Call Today
-    </a>
-  </div>
+  <a href="https://calendly.com/davisleebooth/free_consultation" class="btn primary" target="_blank">
+    Schedule A Call Today
+  </a>
 </div>
 
 <!-- FOOTER -->
 <div class="footer">
-  Aerospace Career Transformation • 5-person cohort system
+  Aerospace Career Transformation
 </div>
 
 <!-- COUNTDOWN -->
