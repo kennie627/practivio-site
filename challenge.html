@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>5 Day Engineering Challenge | Engineering Mentor</title>
+<title>5-Day Aerospace Engineering Breakthrough | Engineering Mentor</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
@@ -78,14 +78,10 @@ li { margin-bottom:10px; }
   border:none;
 }
 
-@media (max-width:768px){
-  .container{
-    flex-direction:column;
-  }
-
-  .image {
-    order: -1;
-  }
+.countdown {
+  margin-top:15px;
+  color:#aaa;
+  font-weight:bold;
 }
 
 .footer {
@@ -101,24 +97,32 @@ li { margin-bottom:10px; }
 <!-- HERO -->
 <div class="container">
   <div class="text">
-    <h1>5 Day Engineering Challenge</h1>
+    <h1>🚀 5-Day Aerospace Engineering Breakthrough</h1>
+
+    <p>You don’t have a skill problem.</p>
+    <p>You have a positioning and communication problem.</p>
 
     <p>
-      This is a 5-day working session designed to show you exactly what’s holding you back from landing top engineering opportunities.
+      That’s why you’re not getting the opportunities you know you’re capable of.
     </p>
 
     <p>
-      This is not theory. You will take action immediately.
+      This 5-day intensive is designed to fix that.
     </p>
 
     <p>
-      There is a $90 commitment to join. If you decide to move forward into the full 90-day bootcamp, this will be credited toward your enrollment.
+      No theory. No fluff. You will take action immediately, get direct feedback, and identify exactly what’s holding you back.
     </p>
+
+    <p class="muted">
+      This is not for everyone. Only join if you’re serious about improving.
+    </p>
+
+    <div class="countdown" id="countdown"></div>
 
     <a href="https://buy.stripe.com/4gMeVf63De2Vguh4CY6g80l" class="btn primary" target="_blank">
-      Join the Challenge
+      🚀 Start the Breakthrough
     </a>
-
   </div>
 
   <div class="image">
@@ -130,76 +134,76 @@ li { margin-bottom:10px; }
 
 <!-- PROBLEM -->
 <div class="section">
-  <h2>Why You’re Not Getting the Opportunities You Want</h2>
+  <h2>Why You’re Stuck</h2>
 
-  <p>Most engineers think the problem is technical skill.</p>
-  <p>It’s not.</p>
+  <p>Most engineers believe getting hired comes down to technical ability.</p>
+  <p>It doesn’t.</p>
 
   <p>
-    The real issue is how you present yourself, how you communicate, and how you position your experience.
+    The engineers who win opportunities are the ones who can communicate clearly, position themselves effectively, and perform under pressure.
   </p>
 
   <p>
-    I’ve seen highly capable engineers get passed over simply because they couldn’t clearly explain their value.
-  </p>
-
-  <p>
-    This challenge is designed to fix that fast.
+    I’ve seen highly capable engineers get passed over repeatedly because they couldn’t demonstrate their value.
   </p>
 </div>
 
-<!-- WHAT YOU GET -->
+<!-- DAY BREAKDOWN -->
 <div class="section dark">
-  <h2>What Happens in 5 Days</h2>
+  <h2>The 5-Day Breakdown</h2>
 
-  <ul>
-    <li>Break down exactly where you are and what’s holding you back</li>
-    <li>Define a clear target role and direction</li>
-    <li>Improve how you answer interview questions</li>
-    <li>Get direct feedback on how you communicate</li>
-    <li>Start positioning yourself like a top candidate</li>
-  </ul>
+  <h3>Day 1 — The Reality Check</h3>
+  <p>You will identify exactly what’s holding you back.</p>
 
-  <p>
-    You will not leave this the same engineer you came in as.
+  <h3>Day 2 — Clarity and Direction</h3>
+  <p>You will define your target role and path forward.</p>
+
+  <h3>Day 3 — Communication Under Pressure</h3>
+  <p>You will fix how you present yourself in interviews.</p>
+
+  <h3>Day 4 — Positioning Like a Top Candidate</h3>
+  <p>You will begin operating at a higher level.</p>
+
+  <h3>Day 5 — The Breakthrough</h3>
+  <p>You leave with clarity, confidence, and a new approach.</p>
+
+  <p class="muted">
+    Most people come in thinking they need more knowledge.  
+    They leave realizing they needed a different approach.
   </p>
 </div>
 
-<!-- AUTHORITY -->
+<!-- TESTIMONIALS -->
 <div class="section">
-  <h2>Who This Is For</h2>
+  <h2>What Engineers Realize</h2>
 
   <p>
-    Engineers who are serious about improving and want real feedback.
+    “I thought I needed more technical skills. Turns out I just needed to communicate what I already knew.”
   </p>
 
   <p>
-    Students, recent grads, or professionals trying to break into aerospace or level up.
+    “This changed how I approach interviews completely.”
   </p>
 
   <p>
-    This is not for people looking for motivation.
-  </p>
-
-  <p>
-    This is for people ready to execute.
+    “I finally understand why I wasn’t getting offers.”
   </p>
 </div>
 
 <!-- CTA -->
 <div class="section dark">
-  <h2>How It Works</h2>
+  <h2>This Is Where It Starts</h2>
 
   <p>
-    You join the 5-day challenge and start working immediately.
+    You join and begin executing immediately.
   </p>
 
   <p>
-    You get direct feedback, clear direction, and real execution.
+    You get clarity, direction, and real feedback.
   </p>
 
   <p>
-    At the end, if it makes sense, you can apply that $90 toward the full 90-day transformation program.
+    Your $90 is credited toward the full 90-day program if you continue.
   </p>
 
   <p class="muted">
@@ -207,7 +211,7 @@ li { margin-bottom:10px; }
   </p>
 
   <a href="https://buy.stripe.com/4gMeVf63De2Vguh4CY6g80l" class="btn primary" target="_blank">
-    Secure Your Spot
+      🚀 Reserve Your Spot Now
   </a>
 </div>
 
@@ -215,6 +219,32 @@ li { margin-bottom:10px; }
 <div class="footer">
   Engineering Mentor
 </div>
+
+<!-- COUNTDOWN SCRIPT -->
+<script>
+function getDeadline() {
+  const now = new Date();
+  let deadline = new Date(now.getFullYear(), now.getMonth(), 10);
+  if (now > deadline) {
+    deadline = new Date(now.getFullYear(), now.getMonth() + 1, 10);
+  }
+  return deadline;
+}
+
+function updateCountdown() {
+  const now = new Date().getTime();
+  const deadline = getDeadline().getTime();
+  const distance = deadline - now;
+
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+
+  document.getElementById("countdown").innerHTML =
+    "Spots closing in: " + days + "d " + hours + "h";
+}
+
+setInterval(updateCountdown, 1000);
+</script>
 
 </body>
 </html>
