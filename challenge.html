@@ -97,9 +97,7 @@ li { margin-bottom:10px; }
 <!-- HERO -->
 <div class="container">
   <div class="text">
-    <h1>🚀 5-Day Aerospace Engineering Challenge
-
-    </h1>
+    <h1>🚀 5-Day Aerospace Engineering Challenge</h1>
 
     <p>You don’t have a skill problem.</p>
     <p>You have a positioning and communication problem.</p>
@@ -222,17 +220,7 @@ li { margin-bottom:10px; }
   Engineering Mentor
 </div>
 
-<!-- COUNTDOWN SCRIPT -->
-<script>
-function getDeadline() {
-  const now = new Date();
-  let deadline = new Date(now.getFullYear(), now.getMonth(), 10);
-  if (now > deadline) {
-    deadline = new Date(now.getFullYear(), now.getMonth() + 1, 10);
-  }
-  return deadline;
-}
-
+<!-- FIXED COUNTDOWN SCRIPT -->
 <script>
 const countdownKey = "challengeCountdown";
 
@@ -241,7 +229,7 @@ function getDeadline() {
 
   if (!saved) {
     const now = new Date().getTime();
-    const deadline = now + (48 * 60 * 60 * 1000); // 48 hours
+    const deadline = now + (48 * 60 * 60 * 1000);
     localStorage.setItem(countdownKey, deadline);
     return deadline;
   }
@@ -256,16 +244,18 @@ function updateCountdown() {
 
   if (distance <= 0) {
     localStorage.removeItem(countdownKey);
+    document.getElementById("countdown").innerHTML = "⏳ Spots closing soon...";
     return;
   }
 
-  const hours = Math.floor((distance / (1000 * 60 * 60)));
+  const hours = Math.floor(distance / (1000 * 60 * 60));
   const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 
   document.getElementById("countdown").innerHTML =
     "⏳ Spots closing in: " + hours + "h " + minutes + "m";
 }
 
+updateCountdown();
 setInterval(updateCountdown, 1000);
 </script>
 
