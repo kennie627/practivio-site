@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>5-Day Aerospace Engineering Breakthrough | Engineering Mentor</title>
+<title>5-Day Aerospace Career Breakthrough Bootcamp | Engineering Mentor</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
@@ -117,7 +117,7 @@ li { margin-bottom:10px; }
 <!-- HERO -->
 <div class="container">
   <div class="text">
-    <h1>🚀 5-Day Aerospace Engineering Challenge</h1>
+    <h1>🚀 5-Day Aerospace Career Breakthrough Bootcamp</h1>
 
     <p>You don’t have a skill problem.</p>
     <p>You have a positioning and communication problem.</p>
@@ -127,24 +127,25 @@ li { margin-bottom:10px; }
     </p>
 
     <p>
-      This 5-day challenge is designed to fix that.
+      This 5-day bootcamp is designed to fix that.
     </p>
 
     <p>
       No theory. No fluff. You will take action immediately, get direct feedback, and identify exactly what’s holding you back.
     </p>
+
     <p>
-  This is a rare opportunity to work one-on-one with a former NASA Engineer / Rocket Engineer - giving you access to insights, feedback, and direction most engineers never get - all designed to help you break into the aerospace industry.
-</p>
+      This is a rare opportunity to work one-on-one with a former NASA Engineer / Rocket Engineer - giving you access to insights, feedback, and direction most engineers never get - all designed to help you break into the aerospace industry.
+    </p>
 
     <p class="muted">
-      This is not for everyone. Only join if you’re serious about improving.
+      Enrollment closes Sunday at 1PM. Cohort begins Monday.
     </p>
 
     <div class="countdown" id="countdown"></div>
 
     <a href="https://buy.stripe.com/4gMeVf63De2Vguh4CY6g80l" class="btn primary" target="_blank">
-      🚀 Start the Breakthrough
+      🚀 Join the Bootcamp
     </a>
   </div>
 
@@ -230,7 +231,7 @@ li { margin-bottom:10px; }
   </p>
 
   <p class="muted">
-    Limited spots available. Only serious candidates.
+    Enrollment closes Sunday at 1PM. Cohort begins Monday.
   </p>
 
   <a href="https://buy.stripe.com/4gMeVf63De2Vguh4CY6g80l" class="btn primary" target="_blank">
@@ -243,39 +244,36 @@ li { margin-bottom:10px; }
   Engineering Mentor
 </div>
 
-<!-- COUNTDOWN SCRIPT -->
+<!-- WEEKLY COUNTDOWN SCRIPT (WORKING) -->
 <script>
-const countdownKey = "challengeCountdown";
+function getNextSundayDeadline() {
+  const now = new Date();
+  const deadline = new Date(now);
 
-function getDeadline() {
-  let saved = localStorage.getItem(countdownKey);
+  const day = now.getDay();
+  const daysUntilSunday = (7 - day) % 7;
 
-  if (!saved) {
-    const now = new Date().getTime();
-    const deadline = now + (48 * 60 * 60 * 1000);
-    localStorage.setItem(countdownKey, deadline);
-    return deadline;
+  deadline.setDate(now.getDate() + daysUntilSunday);
+  deadline.setHours(13, 0, 0, 0);
+
+  if (now > deadline) {
+    deadline.setDate(deadline.getDate() + 7);
   }
 
-  return parseInt(saved);
+  return deadline;
 }
 
 function updateCountdown() {
-  const now = new Date().getTime();
-  const deadline = getDeadline();
+  const now = new Date();
+  const deadline = getNextSundayDeadline();
   const distance = deadline - now;
 
-  if (distance <= 0) {
-    localStorage.removeItem(countdownKey);
-    document.getElementById("countdown").innerHTML = "⏳ Spots closing soon...";
-    return;
-  }
-
-  const hours = Math.floor(distance / (1000 * 60 * 60));
-  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((distance / (1000 * 60)) % 60);
 
   document.getElementById("countdown").innerHTML =
-    "⏳ Spots closing in: " + hours + "h " + minutes + "m";
+    "⏳ Enrollment closes Sunday at 1PM: " + days + "d " + hours + "h " + minutes + "m";
 }
 
 updateCountdown();
