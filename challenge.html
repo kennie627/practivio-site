@@ -89,6 +89,26 @@ li { margin-bottom:10px; }
   padding:40px;
   color:#666;
 }
+
+/* MOBILE FIX ONLY */
+@media (max-width:768px){
+  .container {
+    flex-direction: column;
+  }
+
+  .image {
+    order: -1;
+    width: 100%;
+  }
+
+  .image video {
+    max-width: 100%;
+  }
+
+  .text {
+    width: 100%;
+  }
+}
 </style>
 </head>
 
@@ -223,7 +243,7 @@ li { margin-bottom:10px; }
   Engineering Mentor
 </div>
 
-<!-- FIXED COUNTDOWN SCRIPT -->
+<!-- COUNTDOWN SCRIPT -->
 <script>
 const countdownKey = "challengeCountdown";
 
