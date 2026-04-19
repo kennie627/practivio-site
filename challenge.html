@@ -98,7 +98,7 @@ li { margin-bottom:10px; }
 <div class="container">
   <div class="text">
     <h1>🚀 5-Day Aerospace Engineering Challenge
-        
+
     </h1>
 
     <p>You don’t have a skill problem.</p>
@@ -233,16 +233,37 @@ function getDeadline() {
   return deadline;
 }
 
+<script>
+const countdownKey = "challengeCountdown";
+
+function getDeadline() {
+  let saved = localStorage.getItem(countdownKey);
+
+  if (!saved) {
+    const now = new Date().getTime();
+    const deadline = now + (48 * 60 * 60 * 1000); // 48 hours
+    localStorage.setItem(countdownKey, deadline);
+    return deadline;
+  }
+
+  return parseInt(saved);
+}
+
 function updateCountdown() {
   const now = new Date().getTime();
-  const deadline = getDeadline().getTime();
+  const deadline = getDeadline();
   const distance = deadline - now;
 
-  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+  if (distance <= 0) {
+    localStorage.removeItem(countdownKey);
+    return;
+  }
+
+  const hours = Math.floor((distance / (1000 * 60 * 60)));
+  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 
   document.getElementById("countdown").innerHTML =
-    "Spots closing in: " + days + "d " + hours + "h";
+    "⏳ Spots closing in: " + hours + "h " + minutes + "m";
 }
 
 setInterval(updateCountdown, 1000);
